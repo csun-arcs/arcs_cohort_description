@@ -14,7 +14,7 @@
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
             <!-- add zed camera stl -->
-                <mesh filename="file://$(find cohort)/meshes/zedm.stl"/>
+                <mesh filename="file://$(find arcs_cohort_description)/meshes/zedm.stl"/>
             </geometry>
             <material name="black">
                 <color rgba="0 0 0 0.9"/>
