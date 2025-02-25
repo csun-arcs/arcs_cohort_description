@@ -3,8 +3,8 @@
 
 
 <!--Camera-->
-    <joint name="zedm_camera_center_joint" type="fixed">
-        <parent link="chassis"/>
+    <!-- <joint name="zedm_camera_center_joint" type="fixed">
+        <parent link="zedmini_center_link"/>
         <child link="zedm_camera_center"/>
         <origin xyz="0.305 0 0.08" rpy="0 0 0" />
     </joint>
@@ -13,18 +13,17 @@
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
-            <!-- add zed camera stl -->
                 <mesh filename="file://$(find arcs_cohort_description)/meshes/zedm.stl"/>
             </geometry>
             <material name="black">
                 <color rgba="0 0 0 0.9"/>
             </material>
         </visual>
-    </link>
+    </link> -->
 
     <!-- Left Camera -->
     <joint name="zedm_left_camera_joint" type="fixed">
-        <parent link="zedm_camera_center"/>
+        <parent link="zedmini_center_link"/>
         <child link="zedm_left_camera_frame"/>
         <origin xyz="0 0.03 0" rpy="0 0 0" />
     </joint>
@@ -41,7 +40,7 @@
 
     <!-- Right Camera -->
     <joint name="zedm_right_camera_joint" type="fixed">
-        <parent link="zedm_camera_center"/>
+        <parent link="zedmini_center_link"/>
         <child link="zedm_right_camera_frame"/>
         <origin xyz="0 -0.03 0" rpy="0 0 0" />
     </joint>
@@ -66,7 +65,7 @@
         <sensor name="left_camera" type="camera">
             <pose> 0 0 0 0 0 0 </pose>
             <visualize>true</visualize>
-            <update_rate>10</update_rate>
+            <update_rate>30</update_rate>
             <camera>
                 <camera_info_topic>camera/left_camera_info</camera_info_topic>
                 <horizontal_fov>1.089</horizontal_fov>
@@ -81,10 +80,7 @@
                 </clip>
             </camera>
             <topic>camera/left_camera_image_raw</topic>
-            <gz_frame_id>camera_left_link_optical</gz_frame_id>
-            <!-- <plugin name="left_camera_controller" filename="libgazebo_ros_camera.so">
-                <frame_name>zedm_left_optical_frame</frame_name>
-            </plugin> -->
+            <gz_frame_id>zedm_left_camera_optical_frame</gz_frame_id>
         </sensor>
     </gazebo>
 
@@ -96,7 +92,7 @@
         <sensor name="right_camera" type="camera">
             <pose> 0 0 0 0 0 0 </pose>
             <visualize>true</visualize>
-            <update_rate>10</update_rate>
+            <update_rate>30</update_rate>
             <camera>
                 <camera_info_topic>camera/right_camera_info</camera_info_topic>
                 <horizontal_fov>1.089</horizontal_fov>
@@ -111,60 +107,9 @@
                 </clip>
             </camera>
             <topic>camera/right_camera_image_raw</topic>
-            <gz_frame_id>camera_right_link_optical</gz_frame_id>
-            <!-- <plugin name="right_camera_controller" filename="libgazebo_ros_camera.so">
-                <frame_name>zedm_right_optical_frame</frame_name>
-            </plugin> -->
+            <gz_frame_id>zedm_right_camera_optical_frame</gz_frame_id>
         </sensor>
     </gazebo>
-
-
-    <!-- <gazebo reference="zedm_left_camera_frame">
-        <sensor type="multicamera" name="stereo_camera">
-        <visualize>true</visualize>
-          <update_rate>30.0</update_rate>
-          <camera name="left">
-            <horizontal_fov>1.089</horizontal_fov>
-            <image>
-              <width>640</width>
-              <height>800</height>
-              <format>R8G8B8</format>
-            </image>
-            <clip>
-              <near>0.05</near>
-              <far>8.0</far>
-            </clip>
-          </camera>
-          <camera name="right">
-            <pose>0 -0.06 0 0 0 0</pose>
-            <horizontal_fov>1.089</horizontal_fov>
-            <image>
-              <width>640</width>
-              <height>800</height>
-              <format>R8G8B8</format>
-            </image>
-            <clip>
-              <near>0.05</near>
-              <far>8.0</far>
-            </clip>
-          </camera>
-          <plugin name="stereo_camera_controller" filename="libgazebo_ros_multicamera.so">
-            <alwaysOn>true</alwaysOn>
-            <updateRate>30.0</updateRate>
-            <cameraName>multisense_sl/camera</cameraName>
-            <imageTopicName>image_raw</imageTopicName>
-            <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-            <frameName>zedm_left_camera_optical_frame</frameName>
-            <rightFrameName>zedm_right_camera_optical_frame</rightFrameName>
-            <hackBaseline>0.06</hackBaseline>
-            <distortionK1>0.0</distortionK1>
-            <distortionK2>0.0</distortionK2>
-            <distortionK3>0.0</distortionK3>
-            <distortionT1>0.0</distortionT1>
-            <distortionT2>0.0</distortionT2>
-          </plugin>
-        </sensor>
-    </gazebo> -->
 
 
 </robot>
