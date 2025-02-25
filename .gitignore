@@ -1,1 +1,2 @@
-.vscode/* 
+.gitignore
+arcs_cohort_description/.vscode/*
