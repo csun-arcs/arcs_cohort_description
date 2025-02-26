@@ -28,11 +28,11 @@ def generate_launch_description():
         parameters=[params]
     )
 
-    node_joint_state_publisher_gui = Node(
-        package='joint_state_publisher_gui',
-        executable='joint_state_publisher_gui',
-        output='screen'
-    )
+    # node_joint_state_publisher = Node(
+    #     package='joint_state_publisher',
+    #     executable='joint_state_publisher',
+    #     output='screen'
+    # )
 
     node_rviz2 = Node(
         package='rviz2',
@@ -49,6 +49,6 @@ def generate_launch_description():
             description='Use sim time if true'),
 
         node_robot_state_publisher,
-        node_joint_state_publisher_gui,
+        # node_joint_state_publisher,
         node_rviz2
     ])

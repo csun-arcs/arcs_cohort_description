@@ -55,9 +55,9 @@
 
     <link name="zedm_right_camera_optical_frame"/>
 
-    <gazebo reference="zedm_camera_center">
+    <!-- <gazebo reference="zedm_camera_center">
         <material>Gazebo/Green</material>
-    </gazebo>
+    </gazebo> -->
 
 
     <gazebo reference="zedm_left_camera_frame">
