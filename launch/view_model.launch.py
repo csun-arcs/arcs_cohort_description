@@ -1,0 +1,128 @@
+import os
+
+from ament_index_python.packages import get_package_share_directory
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import (
+    LaunchConfiguration,
+    Command,
+    PathJoinSubstitution,
+    PythonExpression,
+)
+from launch.conditions import IfCondition
+from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
+
+
+def generate_launch_description():
+    pkg_share = get_package_share_directory("arcs_cohort_description")
+    default_model_file = "description/robot.urdf.xacro"
+    default_rviz_config_file = os.path.join(
+        pkg_share, "rviz_config", "robot_model.rviz"
+    )
+
+    # Launch arguments
+    declare_model_package_cmd = DeclareLaunchArgument(
+        "model_package",
+        default_value="arcs_cohort_description",
+        description="Package with the robot model file",
+    )
+    declare_model_file_cmd = DeclareLaunchArgument(
+        "model_file",
+        default_value=default_model_file,
+        description="Path to URDF/Xacro file within model_package",
+    )
+    declare_use_sim_time_cmd = DeclareLaunchArgument(
+        "use_sim_time", default_value="false", description="Use simulation time if true"
+    )
+    declare_use_jsp_cmd = DeclareLaunchArgument(
+        "use_jsp",
+        default_value="true",
+        description="If true, launch the joint_state_publisher (CLI)",
+    )
+    declare_use_jsp_gui_cmd = DeclareLaunchArgument(
+        "use_jsp_gui",
+        default_value="false",
+        description="If true, launch the joint_state_publisher_gui",
+    )
+    declare_use_rviz_cmd = DeclareLaunchArgument(
+        "use_rviz", default_value="true", description="If true, launch RViz"
+    )
+    declare_rviz_config_cmd = DeclareLaunchArgument(
+        "rviz_config",
+        default_value=default_rviz_config_file,
+        description="Path to the RViz config file",
+    )
+
+    # LaunchConfigurations
+    model_package = LaunchConfiguration("model_package")
+    model_file = LaunchConfiguration("model_file")
+    use_sim_time = LaunchConfiguration("use_sim_time")
+    use_jsp = LaunchConfiguration("use_jsp")
+    use_jsp_gui = LaunchConfiguration("use_jsp_gui")
+    use_rviz = LaunchConfiguration("use_rviz")
+    rviz_config = LaunchConfiguration("rviz_config")
+
+    # Robot description from Xacro
+    robot_description = Command(
+        ["xacro ", PathJoinSubstitution([FindPackageShare(model_package), model_file])]
+    )
+
+    # Robot State Publisher
+    rsp_node = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        name="robot_state_publisher",
+        output="screen",
+        parameters=[
+            {"robot_description": robot_description, "use_sim_time": use_sim_time}
+        ],
+    )
+
+    # IfCondition for the CLI JSP: it should only run if use_jsp == 'true' **and** use_jsp_gui == 'false'
+    jsp_node = Node(
+        condition=IfCondition(
+            PythonExpression(
+                ["'true' == '", use_jsp, "' and 'true' != '", use_jsp_gui, "'"]
+            )
+        ),
+        package="joint_state_publisher",
+        executable="joint_state_publisher",
+        name="joint_state_publisher",
+        output="screen",
+    )
+
+    # GUI JSP node: runs if use_jsp_gui == 'true'
+    jsp_gui_node = Node(
+        condition=IfCondition(use_jsp_gui),
+        package="joint_state_publisher_gui",
+        executable="joint_state_publisher_gui",
+        name="joint_state_publisher_gui",
+        output="screen",
+    )
+
+    # RViz node
+    rviz_node = Node(
+        condition=IfCondition(use_rviz),
+        package="rviz2",
+        executable="rviz2",
+        name="rviz2",
+        output="screen",
+        arguments=["-d", rviz_config],
+    )
+
+    return LaunchDescription(
+        [
+            declare_model_package_cmd,
+            declare_model_file_cmd,
+            declare_use_sim_time_cmd,
+            declare_use_jsp_cmd,
+            declare_use_jsp_gui_cmd,
+            declare_use_rviz_cmd,
+            declare_rviz_config_cmd,
+            rsp_node,
+            jsp_node,
+            jsp_gui_node,
+            rviz_node,
+        ]
+    )
