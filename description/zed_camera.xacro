@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
-
-<!--Camera-->
+    <!--Camera-->
     <!-- <joint name="zedm_camera_center_joint" type="fixed">
         <parent link="zedmini_center_link"/>
         <child link="zedm_camera_center"/>
@@ -59,7 +58,6 @@
         <material>Gazebo/Green</material>
     </gazebo> -->
 
-
     <gazebo reference="zedm_left_camera_frame">
 
         <sensor name="left_camera" type="camera">
@@ -84,9 +82,6 @@
         </sensor>
     </gazebo>
 
-
-
-
     <gazebo reference="zedm_right_camera_frame">
 
         <sensor name="right_camera" type="camera">
@@ -110,6 +105,5 @@
             <gz_frame_id>zedm_right_camera_optical_frame</gz_frame_id>
         </sensor>
     </gazebo>
-
 
 </robot>
