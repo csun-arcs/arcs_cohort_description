@@ -2,7 +2,7 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, ExecuteProcess
 from launch.substitutions import (
     LaunchConfiguration,
     Command,
@@ -17,6 +17,9 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     pkg_share = get_package_share_directory("arcs_cohort_description")
     default_model_file = "description/robot.urdf.xacro"
+    default_rviz_config_template_file = os.path.join(
+        pkg_share, "rviz_config", "robot_model.rviz.template"
+    )
     default_rviz_config_file = os.path.join(
         pkg_share, "rviz_config", "robot_model.rviz"
     )
@@ -31,6 +34,11 @@ def generate_launch_description():
         "model_file",
         default_value=default_model_file,
         description="Path to URDF/Xacro file within model_package",
+    )
+    declare_robot_name_cmd = DeclareLaunchArgument(
+        'robot_name',
+        default_value='cohort',
+        description='Name of the robot'
     )
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         "use_sim_time", default_value="false", description="Use simulation time if true"
@@ -48,24 +56,31 @@ def generate_launch_description():
     declare_use_rviz_cmd = DeclareLaunchArgument(
         "use_rviz", default_value="true", description="If true, launch RViz"
     )
+    declare_rviz_config_template_cmd = DeclareLaunchArgument(
+        "rviz_config_template",
+        default_value=default_rviz_config_template_file,
+        description="Path to the RViz config template file",
+    )
     declare_rviz_config_cmd = DeclareLaunchArgument(
         "rviz_config",
         default_value=default_rviz_config_file,
         description="Path to the RViz config file",
     )
 
-    # LaunchConfigurations
+    # Launch Configurations
     model_package = LaunchConfiguration("model_package")
     model_file = LaunchConfiguration("model_file")
+    robot_name = LaunchConfiguration('robot_name')
     use_sim_time = LaunchConfiguration("use_sim_time")
     use_jsp = LaunchConfiguration("use_jsp")
     use_jsp_gui = LaunchConfiguration("use_jsp_gui")
     use_rviz = LaunchConfiguration("use_rviz")
+    rviz_config_template = LaunchConfiguration("rviz_config_template")
     rviz_config = LaunchConfiguration("rviz_config")
 
     # Robot description from Xacro
     robot_description = Command(
-        ["xacro ", PathJoinSubstitution([FindPackageShare(model_package), model_file])]
+        ["xacro ", PathJoinSubstitution([FindPackageShare(model_package), model_file]), ' prefix:=', robot_name, "_"]
     )
 
     # Robot State Publisher
@@ -101,6 +116,13 @@ def generate_launch_description():
         output="screen",
     )
 
+    # Generate RViz config from template
+    rviz_config_generator = ExecuteProcess(
+        cmd=[["ARCS_COHORT_PREFIX='", robot_name, "_' envsubst < ", rviz_config_template, " > ", rviz_config]],
+        shell=True,
+        output='screen',
+    )
+
     # RViz node
     rviz_node = Node(
         condition=IfCondition(use_rviz),
@@ -115,14 +137,17 @@ def generate_launch_description():
         [
             declare_model_package_cmd,
             declare_model_file_cmd,
+            declare_robot_name_cmd,
             declare_use_sim_time_cmd,
             declare_use_jsp_cmd,
             declare_use_jsp_gui_cmd,
             declare_use_rviz_cmd,
+            declare_rviz_config_template_cmd,
             declare_rviz_config_cmd,
             rsp_node,
             jsp_node,
             jsp_gui_node,
+            rviz_config_generator,
             rviz_node,
         ]
     )
