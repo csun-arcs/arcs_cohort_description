@@ -38,7 +38,12 @@ def generate_launch_description():
     declare_robot_name_cmd = DeclareLaunchArgument(
         'robot_name',
         default_value='',
-        description='Name of the robot'
+        description='Name of the robot (used to form prefixes in robot model description).'
+    )
+    declare_namespace_cmd = DeclareLaunchArgument(
+        "namespace",
+        default_value="",
+        description="Namespace under which to bring up nodes, topics, etc."
     )
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         "use_sim_time", default_value="false", description="Use simulation time if true"
@@ -71,6 +76,7 @@ def generate_launch_description():
     model_package = LaunchConfiguration("model_package")
     model_file = LaunchConfiguration("model_file")
     robot_name = LaunchConfiguration('robot_name')
+    namespace = LaunchConfiguration("namespace")
     use_sim_time = LaunchConfiguration("use_sim_time")
     use_jsp = LaunchConfiguration("use_jsp")
     use_jsp_gui = LaunchConfiguration("use_jsp_gui")
@@ -106,6 +112,7 @@ def generate_launch_description():
         package="robot_state_publisher",
         executable="robot_state_publisher",
         name="robot_state_publisher",
+        namespace=namespace,
         output="screen",
         parameters=[
             {"robot_description": robot_description, "use_sim_time": use_sim_time}
@@ -122,6 +129,7 @@ def generate_launch_description():
         package="joint_state_publisher",
         executable="joint_state_publisher",
         name="joint_state_publisher",
+        namespace=namespace,
         output="screen",
     )
 
@@ -131,14 +139,21 @@ def generate_launch_description():
         package="joint_state_publisher_gui",
         executable="joint_state_publisher_gui",
         name="joint_state_publisher_gui",
+        namespace=namespace,
         output="screen",
     )
 
     # Generate RViz config from template.
     # The robot prefix will be substituted into the RViz config template in
-    # place of the ARCS_COHORT_PREFIX variable.
+    # place of the ARCS_COHORT_PREFIX variable and the namespace will be
+    # substituted in place of ARCS_COHORT_NAMESPACE.
+    namespace_env_var = PythonExpression(
+        ["'/", namespace, "' if '", namespace, "' else ''"]
+    )
     rviz_config_generator = ExecuteProcess(
-        cmd=[["ARCS_COHORT_PREFIX='", robot_prefix, "' envsubst < ", rviz_config_template, " > ", rviz_config]],
+        cmd=[["ARCS_COHORT_PREFIX='", robot_prefix, "' ",
+              "ARCS_COHORT_NAMESPACE='", namespace_env_var, "' ",
+              "envsubst < ", rviz_config_template, " > ", rviz_config]],
         shell=True,
         output='screen',
     )
@@ -149,6 +164,7 @@ def generate_launch_description():
         package="rviz2",
         executable="rviz2",
         name="rviz2",
+        namespace=namespace,
         output="screen",
         arguments=["-d", rviz_config],
     )
@@ -158,6 +174,7 @@ def generate_launch_description():
             declare_model_package_cmd,
             declare_model_file_cmd,
             declare_robot_name_cmd,
+            declare_namespace_cmd,
             declare_use_sim_time_cmd,
             declare_use_jsp_cmd,
             declare_use_jsp_gui_cmd,
