@@ -37,7 +37,7 @@ def generate_launch_description():
     )
     declare_robot_name_cmd = DeclareLaunchArgument(
         'robot_name',
-        default_value='cohort',
+        default_value='',
         description='Name of the robot'
     )
     declare_use_sim_time_cmd = DeclareLaunchArgument(
@@ -78,9 +78,27 @@ def generate_launch_description():
     rviz_config_template = LaunchConfiguration("rviz_config_template")
     rviz_config = LaunchConfiguration("rviz_config")
 
-    # Robot description from Xacro
+    # Compute the robot prefix only if a robot name is provided
+    # This expression will evaluate to, for example, "cohort_" if
+    # robot_name is "cohort", or to an empty string if robot_name is empty.
+    robot_prefix = PythonExpression(
+        ["'", robot_name, "_' if '", robot_name, "' else ''"]
+    )
+    # Compute the prefix argument only if a robot_name/robot_prefix is provided.
+    # This expression will evaluate to, for example, "prefix:=cohort_" if
+    # robot_prefix is "cohort_", or to an empty string if robot_prefix is empty.
+    robot_prefix_arg = PythonExpression(
+        ["('prefix:=' + '", robot_prefix, "') if '", robot_prefix, "' else ''"]
+    )
+
+    # Robot description from Xacro, including the conditional robot name prefix.
     robot_description = Command(
-        ["xacro ", PathJoinSubstitution([FindPackageShare(model_package), model_file]), ' prefix:=', robot_name, "_"]
+        [
+            "xacro ",
+            PathJoinSubstitution([FindPackageShare(model_package), model_file]),
+            " ",
+            robot_prefix_arg,
+        ]
     )
 
     # Robot State Publisher
@@ -116,9 +134,11 @@ def generate_launch_description():
         output="screen",
     )
 
-    # Generate RViz config from template
+    # Generate RViz config from template.
+    # The robot prefix will be substituted into the RViz config template in
+    # place of the ARCS_COHORT_PREFIX variable.
     rviz_config_generator = ExecuteProcess(
-        cmd=[["ARCS_COHORT_PREFIX='", robot_name, "_' envsubst < ", rviz_config_template, " > ", rviz_config]],
+        cmd=[["ARCS_COHORT_PREFIX='", robot_prefix, "' envsubst < ", rviz_config_template, " > ", rviz_config]],
         shell=True,
         output='screen',
     )
