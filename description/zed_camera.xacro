@@ -1,14 +1,18 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
+
+  <!-- Define a macro with a prefix param for the Zed M camera description -->
+  <xacro:macro name="zed_camera_description" params="prefix">
+
     <!--Camera-->
-    <!-- <joint name="zedm_camera_center_joint" type="fixed">
-        <parent link="zedmini_center_link"/>
-        <child link="zedm_camera_center"/>
+    <!-- <joint name="${prefix}zedm_camera_center_joint" type="fixed">
+        <parent link="${prefix}zedmini_center_link"/>
+        <child link="${prefix}zedm_camera_center"/>
         <origin xyz="0.305 0 0.08" rpy="0 0 0" />
     </joint>
 
-    <link name="zedm_camera_center">
+    <link name="${prefix}zedm_camera_center">
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
@@ -21,46 +25,46 @@
     </link> -->
 
     <!-- Left Camera -->
-    <joint name="zedm_left_camera_joint" type="fixed">
-        <parent link="zedmini_center_link"/>
-        <child link="zedm_left_camera_frame"/>
+    <joint name="${prefix}zedm_left_camera_joint" type="fixed">
+        <parent link="${prefix}zedmini_center_link"/>
+        <child link="${prefix}zedm_left_camera_frame"/>
         <origin xyz="0 0.03 0" rpy="0 0 0" />
     </joint>
 
-    <link name="zedm_left_camera_frame" />
+    <link name="${prefix}zedm_left_camera_frame" />
 
-    <joint name="zedm_left_camera_optical_joint" type="fixed">
+    <joint name="${prefix}zedm_left_camera_optical_joint" type="fixed">
         <origin xyz="0 0 0" rpy="-1.57079632679 0.0 -1.57079632679"/>
-        <parent link="zedm_left_camera_frame"/>
-        <child link="zedm_left_camera_optical_frame"/>
+        <parent link="${prefix}zedm_left_camera_frame"/>
+        <child link="${prefix}zedm_left_camera_optical_frame"/>
     </joint>
 
-    <link name="zedm_left_camera_optical_frame"/>
+    <link name="${prefix}zedm_left_camera_optical_frame"/>
 
     <!-- Right Camera -->
-    <joint name="zedm_right_camera_joint" type="fixed">
-        <parent link="zedmini_center_link"/>
-        <child link="zedm_right_camera_frame"/>
+    <joint name="${prefix}zedm_right_camera_joint" type="fixed">
+        <parent link="${prefix}zedmini_center_link"/>
+        <child link="${prefix}zedm_right_camera_frame"/>
         <origin xyz="0 -0.03 0" rpy="0 0 0" />
     </joint>
 
-    <link name="zedm_right_camera_frame" />
+    <link name="${prefix}zedm_right_camera_frame" />
 
-    <joint name="zedm_right_camera_optical_joint" type="fixed">
+    <joint name="${prefix}zedm_right_camera_optical_joint" type="fixed">
         <origin xyz="0 0 0" rpy="-1.57079632679 0.0 -1.57079632679"/>
-        <parent link="zedm_right_camera_frame"/>
-        <child link="zedm_right_camera_optical_frame"/>
+        <parent link="${prefix}zedm_right_camera_frame"/>
+        <child link="${prefix}zedm_right_camera_optical_frame"/>
     </joint>
 
-    <link name="zedm_right_camera_optical_frame"/>
+    <link name="${prefix}zedm_right_camera_optical_frame"/>
 
-    <!-- <gazebo reference="zedm_camera_center">
+    <!-- <gazebo reference="${prefix}zedm_camera_center">
         <material>Gazebo/Green</material>
     </gazebo> -->
 
-    <gazebo reference="zedm_left_camera_frame">
+    <gazebo reference="${prefix}zedm_left_camera_frame">
 
-        <sensor name="left_camera" type="camera">
+        <sensor name="${prefix}left_camera" type="camera">
             <pose> 0 0 0 0 0 0 </pose>
             <visualize>true</visualize>
             <update_rate>30</update_rate>
@@ -82,9 +86,9 @@
         </sensor>
     </gazebo>
 
-    <gazebo reference="zedm_right_camera_frame">
+    <gazebo reference="${prefix}zedm_right_camera_frame">
 
-        <sensor name="right_camera" type="camera">
+        <sensor name="${prefix}right_camera" type="camera">
             <pose> 0 0 0 0 0 0 </pose>
             <visualize>true</visualize>
             <update_rate>30</update_rate>
@@ -105,5 +109,7 @@
             <gz_frame_id>zedm_right_camera_optical_frame</gz_frame_id>
         </sensor>
     </gazebo>
+
+  </xacro:macro>
 
 </robot>
