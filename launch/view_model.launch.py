@@ -10,7 +10,7 @@ from launch.substitutions import (
     PythonExpression,
 )
 from launch.conditions import IfCondition
-from launch_ros.actions import Node
+from launch_ros.actions import Node, PushRosNamespace
 from launch_ros.substitutions import FindPackageShare
 
 
@@ -107,12 +107,14 @@ def generate_launch_description():
         ]
     )
 
+    # Use PushRosNamespace to apply the namespace to all nodes below
+    push_namespace = PushRosNamespace(namespace)
+
     # Robot State Publisher
     rsp_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
         name="robot_state_publisher",
-        namespace=namespace,
         output="screen",
         parameters=[
             {"robot_description": robot_description, "use_sim_time": use_sim_time}
@@ -129,7 +131,6 @@ def generate_launch_description():
         package="joint_state_publisher",
         executable="joint_state_publisher",
         name="joint_state_publisher",
-        namespace=namespace,
         output="screen",
     )
 
@@ -139,7 +140,6 @@ def generate_launch_description():
         package="joint_state_publisher_gui",
         executable="joint_state_publisher_gui",
         name="joint_state_publisher_gui",
-        namespace=namespace,
         output="screen",
     )
 
@@ -164,13 +164,13 @@ def generate_launch_description():
         package="rviz2",
         executable="rviz2",
         name="rviz2",
-        namespace=namespace,
         output="screen",
         arguments=["-d", rviz_config],
     )
 
     return LaunchDescription(
         [
+            # Declare launch arguments
             declare_model_package_cmd,
             declare_model_file_cmd,
             declare_robot_name_cmd,
@@ -181,6 +181,8 @@ def generate_launch_description():
             declare_use_rviz_cmd,
             declare_rviz_config_template_cmd,
             declare_rviz_config_cmd,
+            # Nodes
+            push_namespace,
             rsp_node,
             jsp_node,
             jsp_gui_node,
