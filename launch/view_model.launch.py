@@ -15,13 +15,13 @@ from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-    pkg_share = get_package_share_directory("arcs_cohort_description")
+    pkg_description = get_package_share_directory("arcs_cohort_description")
     default_model_file = "description/robot.urdf.xacro"
     default_rviz_config_template_file = os.path.join(
-        pkg_share, "rviz_config", "robot_model.rviz.template"
+        pkg_description, "rviz_config", "robot_model.rviz.template"
     )
     default_rviz_config_file = os.path.join(
-        pkg_share, "rviz_config", "robot_model.rviz"
+        pkg_description, "rviz_config", "robot_model.rviz"
     )
 
     # Launch arguments
@@ -61,6 +61,10 @@ def generate_launch_description():
     declare_use_rviz_cmd = DeclareLaunchArgument(
         "use_rviz", default_value="true", description="If true, launch RViz"
     )
+    declare_use_rviz_config_template_cmd = DeclareLaunchArgument(
+        "use_rviz_config_template", default_value="true",
+        description="If true, generate the RViz config from the specified RViz config template."
+    )
     declare_rviz_config_template_cmd = DeclareLaunchArgument(
         "rviz_config_template",
         default_value=default_rviz_config_template_file,
@@ -81,6 +85,7 @@ def generate_launch_description():
     use_jsp = LaunchConfiguration("use_jsp")
     use_jsp_gui = LaunchConfiguration("use_jsp_gui")
     use_rviz = LaunchConfiguration("use_rviz")
+    use_rviz_config_template = LaunchConfiguration("use_rviz_config_template")
     rviz_config_template = LaunchConfiguration("rviz_config_template")
     rviz_config = LaunchConfiguration("rviz_config")
 
@@ -147,10 +152,18 @@ def generate_launch_description():
     # The robot prefix will be substituted into the RViz config template in
     # place of the ARCS_COHORT_PREFIX variable and the namespace will be
     # substituted in place of ARCS_COHORT_NAMESPACE.
+    #
+    # NOTE: We should probably change this approach later.  It's a neat trick,
+    # but might not be manageable/scaleable.  Using fixed RViz configurations
+    # for different robot/world scenarios is probably a more robust approach.
+    # This type of dynamic RViz config generation could still be useful in the
+    # early stages of project development to test namespacing, prefixing, etc.
+    #
     namespace_env_var = PythonExpression(
         ["'/", namespace, "' if '", namespace, "' else ''"]
     )
     rviz_config_generator = ExecuteProcess(
+        condition=IfCondition(use_rviz_config_template),
         cmd=[["ARCS_COHORT_PREFIX='", robot_prefix, "' ",
               "ARCS_COHORT_NAMESPACE='", namespace_env_var, "' ",
               "envsubst < ", rviz_config_template, " > ", rviz_config]],
@@ -179,6 +192,7 @@ def generate_launch_description():
             declare_use_jsp_cmd,
             declare_use_jsp_gui_cmd,
             declare_use_rviz_cmd,
+            declare_use_rviz_config_template_cmd,
             declare_rviz_config_template_cmd,
             declare_rviz_config_cmd,
             # Nodes
