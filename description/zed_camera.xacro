@@ -14,7 +14,7 @@ https://github.com/rpanther/panther_simulation/blob/master/panther_gazebo/urdf
 
 
   <!-- Define a macro with a prefix param for the Zed M camera description -->
-  <xacro:macro name="zed_camera_description" params="prefix resolution=VGA">
+  <xacro:macro name="zed_camera_description" params="prefix camera_name=zedm camera_model=zedm resolution=VGA">
 
     <!--Camera-->
     <!-- <joint name="${prefix}zedm_camera_center_joint" type="fixed">
@@ -56,83 +56,119 @@ https://github.com/rpanther/panther_simulation/blob/master/panther_gazebo/urdf
         <xacro:property name="update_rate" value="100" />
     </xacro:if>
 
+    <xacro:if value="${camera_model == 'zed'}">
+        <xacro:property name="baseline" value="0.12" />
+        <xacro:property name="fov" value="2.0" />
+        <xacro:property name="clip_near" value="0.3" />
+        <xacro:property name="clip_far" value="25" />
+        <!-- Gazebo color -->
+        <gazebo reference="${camera_model}_camera_center">
+          <material>Gazebo/Grey</material>
+        </gazebo>
+    </xacro:if>
+    <xacro:if value="${camera_model == 'zedm'}">
+        <xacro:property name="baseline" value="0.06" />
+        <xacro:property name="fov" value="2.0" />
+        <xacro:property name="clip_near" value="0.1" />
+        <xacro:property name="clip_far" value="15" />
+        <!-- Add IMU for ZED -->
+        <!-- <xacro:imu_gazebo name="${camera_name}" frame="${camera_name}_imu_frame_gazebo" /> -->
+        <!-- Gazebo color -->
+        <gazebo reference="${camera_model}_camera_center">
+          <material>Gazebo/DarkGrey</material>
+        </gazebo>
+    </xacro:if>
+    <xacro:if value="${camera_model == 'zed2'}">
+        <xacro:property name="baseline" value="0.12" />
+        <xacro:property name="fov" value="1.8" />
+        <xacro:property name="clip_near" value="0.2" />
+        <xacro:property name="clip_far" value="20" />
+        <!-- Add IMU for ZED -->
+        <xacro:imu_gazebo name="${camera_name}" frame="${camera_name}_imu_frame_gazebo" />
+        <!-- Gazebo color -->
+        <gazebo reference="${camera_model}_camera_center">
+          <material>Gazebo/Black</material>
+        </gazebo>
+    </xacro:if>
+
     <!-- Left Camera -->
-    <joint name="${prefix}zedm_left_camera_joint" type="fixed">
-        <parent link="${prefix}zedmini_center_link"/>
-        <child link="${prefix}zedm_left_camera_frame"/>
-        <origin xyz="0 0.03 0" rpy="0 0 0" />
+    <joint name="${prefix}${camera_name}_left_camera_joint" type="fixed">
+        <parent link="${prefix}${camera_name}_center_link"/>
+        <child link="${prefix}${camera_name}_left_camera_frame"/>
+        <origin xyz="0 ${baseline/2} 0" rpy="0 0 0" />
     </joint>
 
-    <link name="${prefix}zedm_left_camera_frame" />
+    <link name="${prefix}${camera_name}_left_camera_frame" />
 
-    <joint name="${prefix}zedm_left_camera_optical_joint" type="fixed">
-        <parent link="${prefix}zedm_left_camera_frame"/>
-        <child link="${prefix}zedm_left_camera_optical_frame"/>
+    <joint name="${prefix}${camera_name}_left_camera_optical_joint" type="fixed">
+        <parent link="${prefix}${camera_name}_left_camera_frame"/>
+        <child link="${prefix}${camera_name}_left_camera_optical_frame"/>
         <!-- <origin xyz="0 0 0" rpy="-1.57079632679 0.0 -1.57079632679"/> -->
         <origin xyz="0 0 0" rpy="0 0 0"/>
     </joint>
 
-    <link name="${prefix}zedm_left_camera_optical_frame"/>
+    <link name="${prefix}${camera_name}_left_camera_optical_frame"/>
 
     <!-- Right Camera -->
-    <joint name="${prefix}zedm_right_camera_joint" type="fixed">
-        <parent link="${prefix}zedmini_center_link"/>
-        <child link="${prefix}zedm_right_camera_frame"/>
-        <origin xyz="0 -0.03 0" rpy="0 0 0" />
+    <joint name="${prefix}${camera_name}_right_camera_joint" type="fixed">
+        <parent link="${prefix}${camera_name}_center_link"/>
+        <child link="${prefix}${camera_name}_right_camera_frame"/>
+        <origin xyz="0 -${baseline/2} 0" rpy="0 0 0" />
     </joint>
 
-    <link name="${prefix}zedm_right_camera_frame" />
+    <link name="${prefix}${camera_name}_right_camera_frame" />
 
-    <joint name="${prefix}zedm_right_camera_optical_joint" type="fixed">
-        <parent link="${prefix}zedm_right_camera_frame"/>
-        <child link="${prefix}zedm_right_camera_optical_frame"/>
-        <origin xyz="0 0 0" rpy="-1.57079632679 0.0 -1.57079632679"/>
+    <joint name="${prefix}${camera_name}_right_camera_optical_joint" type="fixed">
+        <parent link="${prefix}${camera_name}_right_camera_frame"/>
+        <child link="${prefix}${camera_name}_right_camera_optical_frame"/>
+        <!-- <origin xyz="0 0 0" rpy="-1.57079632679 0.0 -1.57079632679"/> -->
+        <origin xyz="0 0 0" rpy="0 0 0"/>
     </joint>
 
-    <link name="${prefix}zedm_right_camera_optical_frame"/>
+    <link name="${prefix}${camera_name}_right_camera_optical_frame"/>
 
     <!-- Left Camera Gazebo -->
-    <gazebo reference="${prefix}zedm_left_camera_frame">
+    <gazebo reference="${prefix}${camera_name}_left_camera_frame">
         <sensor name="${prefix}left_camera" type="rgbd_camera">
             <topic>camera/left_camera</topic>
-            <gz_frame_id>zedm_left_camera_optical_frame</gz_frame_id>
+            <gz_frame_id>${camera_name}_left_camera_optical_frame</gz_frame_id>
             <always_on>1</always_on>
             <update_rate>${update_rate}</update_rate>
             <visualize>true</visualize>
             <camera>
                 <camera_info_topic>camera/left_camera_info</camera_info_topic>
-                <horizontal_fov>1.089</horizontal_fov>
+                <horizontal_fov>${fov}</horizontal_fov>
                 <image>
                     <format>R8G8B8</format>
                     <width>${resolution_width}</width>
                     <height>${resolution_height}</height>
                 </image>
                 <clip>
-                    <near>0.05</near>
-                    <far>8.0</far>
+                    <near>${clip_near}</near>
+                    <far>${clip_far}</far>
                 </clip>
             </camera>
         </sensor>
     </gazebo>
 
     <!-- Right Camera Gazebo -->
-    <gazebo reference="${prefix}zedm_right_camera_frame">
+    <gazebo reference="${prefix}${camera_name}_right_camera_frame">
         <sensor name="${prefix}right_camera" type="camera">
             <topic>camera/right_camera/image</topic>
-            <gz_frame_id>zedm_right_camera_optical_frame</gz_frame_id>
+            <gz_frame_id>${camera_name}_right_camera_optical_frame</gz_frame_id>
             <visualize>true</visualize>
             <update_rate>${update_rate}</update_rate>
             <camera>
                 <camera_info_topic>camera/right_camera/camera_info</camera_info_topic>
-                <horizontal_fov>1.089</horizontal_fov>
+                <horizontal_fov>${fov}</horizontal_fov>
                 <image>
                     <format>R8G8B8</format>
                     <width>${resolution_width}</width>
                     <height>${resolution_height}</height>
                 </image>
                 <clip>
-                    <near>0.05</near>
-                    <far>8.0</far>
+                    <near>${clip_near}</near>
+                    <far>${clip_far}</far>
                 </clip>
             </camera>
         </sensor>
