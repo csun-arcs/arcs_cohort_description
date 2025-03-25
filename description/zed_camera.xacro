@@ -1,9 +1,20 @@
 <?xml version="1.0"?>
+
+<!--
+
+Stereolabs Zed Camera Model
+
+Borrows from:
+https://github.com/stereolabs/zed-ros2-wrapper/tree/master/zed_wrapper/urdf
+https://github.com/rpanther/panther_simulation/blob/master/panther_gazebo/urdf
+
+-->
+
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
 
   <!-- Define a macro with a prefix param for the Zed M camera description -->
-  <xacro:macro name="zed_camera_description" params="prefix">
+  <xacro:macro name="zed_camera_description" params="prefix resolution=VGA">
 
     <!--Camera-->
     <!-- <joint name="${prefix}zedm_camera_center_joint" type="fixed">
@@ -23,6 +34,27 @@
             </material>
         </visual>
     </link> -->
+
+    <xacro:if value="${resolution == 'HD2K'}">
+        <xacro:property name="resolution_width" value="2208" />
+        <xacro:property name="resolution_height" value="1242" />
+        <xacro:property name="update_rate" value="15" />
+    </xacro:if>
+    <xacro:if value="${resolution == 'HD1080'}">
+        <xacro:property name="resolution_width" value="1920" />
+        <xacro:property name="resolution_height" value="1080" />
+        <xacro:property name="update_rate" value="30" />
+    </xacro:if>
+    <xacro:if value="${resolution == 'HD720'}">
+        <xacro:property name="resolution_width" value="1280" />
+        <xacro:property name="resolution_height" value="720" />
+        <xacro:property name="update_rate" value="60" />
+    </xacro:if>
+    <xacro:if value="${resolution == 'VGA'}">
+        <xacro:property name="resolution_width" value="672" />
+        <xacro:property name="resolution_height" value="376" />
+        <xacro:property name="update_rate" value="100" />
+    </xacro:if>
 
     <!-- Left Camera -->
     <joint name="${prefix}zedm_left_camera_joint" type="fixed">
@@ -62,23 +94,24 @@
     <!-- Left Camera Gazebo -->
     <gazebo reference="${prefix}zedm_left_camera_frame">
         <sensor name="${prefix}left_camera" type="rgbd_camera">
-          <topic>camera/left_camera</topic>
-          <gz_frame_id>zedm_left_camera_optical_frame</gz_frame_id>
-          <always_on>1</always_on>
-          <update_rate>10</update_rate>
-          <visualize>true</visualize>
-          <camera>
-            <horizontal_fov>1.089</horizontal_fov>
-            <image>
-              <width>640</width>
-              <height>480</height>
-              <format>R_FLOAT32</format>
-            </image>
-            <clip>
-              <near>0.1</near>
-              <far>100</far>
-            </clip>
-          </camera>
+            <topic>camera/left_camera</topic>
+            <gz_frame_id>zedm_left_camera_optical_frame</gz_frame_id>
+            <always_on>1</always_on>
+            <update_rate>${update_rate}</update_rate>
+            <visualize>true</visualize>
+            <camera>
+                <camera_info_topic>camera/left_camera_info</camera_info_topic>
+                <horizontal_fov>1.089</horizontal_fov>
+                <image>
+                    <format>R8G8B8</format>
+                    <width>${resolution_width}</width>
+                    <height>${resolution_height}</height>
+                </image>
+                <clip>
+                    <near>0.05</near>
+                    <far>8.0</far>
+                </clip>
+            </camera>
         </sensor>
     </gazebo>
 
@@ -88,14 +121,14 @@
             <topic>camera/right_camera/image</topic>
             <gz_frame_id>zedm_right_camera_optical_frame</gz_frame_id>
             <visualize>true</visualize>
-            <update_rate>30</update_rate>
+            <update_rate>${update_rate}</update_rate>
             <camera>
                 <camera_info_topic>camera/right_camera/camera_info</camera_info_topic>
                 <horizontal_fov>1.089</horizontal_fov>
                 <image>
                     <format>R8G8B8</format>
-                    <width>640</width>
-                    <height>480</height>
+                    <width>${resolution_width}</width>
+                    <height>${resolution_height}</height>
                 </image>
                 <clip>
                     <near>0.05</near>

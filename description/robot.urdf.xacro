@@ -2,6 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
     <!-- Define the prefix property -->
     <xacro:arg name="prefix" default="" />
+    <xacro:arg name="camera_resolution" default="HD720" />
 
     <!-- Include robot components -->
     <xacro:include filename="robot_core.xacro"/>
@@ -14,7 +15,7 @@
     <!-- Call the robot description macro with the prefix -->
     <xacro:robot_description prefix="$(arg prefix)"/>
     <xacro:vectornav_imu_description prefix="$(arg prefix)"/>
-    <xacro:zed_camera_description prefix="$(arg prefix)"/>
+    <xacro:zed_camera_description prefix="$(arg prefix)" resolution="$(arg camera_resolution)"/>
     <xacro:gazebo_diff_drive_plugin_description prefix="$(arg prefix)"/>
 
 </robot>
