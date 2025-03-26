@@ -66,7 +66,8 @@ https://github.com/rpanther/panther_simulation/blob/master/panther_gazebo/urdf
     <link name="${prefix}zedm_left_camera_frame" />
 
     <joint name="${prefix}zedm_left_camera_optical_joint" type="fixed">
-        <origin xyz="0 0 0" rpy="-1.57079632679 0.0 -1.57079632679"/>
+        <!-- <origin xyz="0 0 0" rpy="-1.57079632679 0.0 -1.57079632679"/> -->
+        <origin xyz="0 0 0" rpy="0.0 0.0 0.0"/>
         <parent link="${prefix}zedm_left_camera_frame"/>
         <child link="${prefix}zedm_left_camera_optical_frame"/>
     </joint>
