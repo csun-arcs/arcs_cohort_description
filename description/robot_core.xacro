@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- Define a macro with a prefix param for the robot description -->
-  <xacro:macro name="robot_description" params="prefix">
+  <xacro:macro name="robot_description" params="prefix camera_name=zedm camera_model=zedm">
 
     <material name="yellow">
       <color rgba="1 1 0 1"/>
@@ -277,7 +277,7 @@
       <axis xyz="0 0 0" />
     </joint>
 
-    <link name="${prefix}camera_mount_link">
+    <link name="${prefix}${camera_name}_camera_mount_link">
       <inertial>
         <origin
           xyz="0 0 0"
@@ -316,11 +316,11 @@
     <joint name="${prefix}camera_mount_joint" type="fixed">
       <origin xyz="0.14426 0.00028171 0.094535" rpy="0 0 0" />
       <parent link="${prefix}base_link" />
-      <child link="${prefix}camera_mount_link" />
+      <child link="${prefix}${camera_name}_camera_mount_link" />
       <axis xyz="0 0 0" />
     </joint>
 
-    <link name="${prefix}zedmini_center_link">
+    <link name="${prefix}${camera_name}_center_link">
       <inertial>
         <origin xyz="-0.00435147007919079 -0.00309486253694627 0.00251127017920943" rpy="0 0 0" />
         <mass value="0.0560548842495178" />
@@ -338,7 +338,7 @@
           rpy="0 0 0" />
         <geometry>
           <mesh
-            filename="file://$(find arcs_cohort_description)/meshes/zedmini_center_link.STL" />
+            filename="file://$(find arcs_cohort_description)/meshes/${camera_model}_center_link.stl" />
         </geometry>
         <material
           name="yellow"/>
@@ -349,15 +349,15 @@
           rpy="0 0 0" />
         <geometry>
           <mesh
-            filename="file://$(find arcs_cohort_description)/meshes/zedmini_center_link.STL" />
+            filename="file://$(find arcs_cohort_description)/meshes/${camera_model}_center_link.stl" />
           <!-- <box size="0.015 0.122 0.025"/> -->
         </geometry>
       </collision>
     </link>
-    <joint name="${prefix}zedmini_center_joint" type="fixed">
+    <joint name="${prefix}${camera_name}_center_joint" type="fixed">
       <origin xyz="0.050151 0.0018215 -0.015053" rpy="0 0 0" />
-      <parent link="${prefix}camera_mount_link" />
-      <child link="${prefix}zedmini_center_link" />
+      <parent link="${prefix}${camera_name}_camera_mount_link" />
+      <child link="${prefix}${camera_name}_center_link" />
       <axis xyz="0 0 0" />
     </joint>
 
