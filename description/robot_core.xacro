@@ -320,47 +320,6 @@
       <axis xyz="0 0 0" />
     </joint>
 
-    <link name="${prefix}${camera_name}_center_link">
-      <inertial>
-        <origin xyz="-0.00435147007919079 -0.00309486253694627 0.00251127017920943" rpy="0 0 0" />
-        <mass value="0.0560548842495178" />
-        <inertia
-          ixx="7.29762807495571E-05"
-          ixy="5.57132554461124E-07"
-          ixz="-2.34695280152666E-07"
-          iyy="5.49793925654236E-06"
-          iyz="-3.21584411064254E-07"
-          izz="7.2705806093778E-05" />
-      </inertial>
-      <visual>
-        <origin
-          xyz="0 0 0"
-          rpy="0 0 0" />
-        <geometry>
-          <mesh
-            filename="file://$(find arcs_cohort_description)/meshes/${camera_model}_center_link.stl" />
-        </geometry>
-        <material
-          name="yellow"/>
-      </visual>
-      <collision>
-        <origin
-          xyz="0 0 0"
-          rpy="0 0 0" />
-        <geometry>
-          <mesh
-            filename="file://$(find arcs_cohort_description)/meshes/${camera_model}_center_link.stl" />
-          <!-- <box size="0.015 0.122 0.025"/> -->
-        </geometry>
-      </collision>
-    </link>
-    <joint name="${prefix}${camera_name}_center_joint" type="fixed">
-      <origin xyz="0.050151 0.0018215 -0.015053" rpy="0 0 0" />
-      <parent link="${prefix}${camera_name}_camera_mount_link" />
-      <child link="${prefix}${camera_name}_center_link" />
-      <axis xyz="0 0 0" />
-    </joint>
-
   </xacro:macro>
 
 </robot>
