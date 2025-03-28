@@ -1,0 +1,5 @@
+repositories:
+  zed-ros2-wrapper:
+    type: git
+    url: git@github.com:stereolabs/zed-ros2-interfaces.git
+    version: main
