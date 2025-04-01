@@ -10,6 +10,7 @@
     <xacro:include filename="robot_core.xacro"/>
     <xacro:include filename="vectornav_imu.xacro"/>
     <xacro:include filename="zed_camera.xacro"/>
+    <xacro:include filename="lidar.xacro"/>
 
     <!-- Include Gazebo plugins -->
     <xacro:include filename="$(find arcs_cohort_gazebo_sim)/control/gazebo_diff_drive_plugin.xacro"/>
