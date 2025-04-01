@@ -36,16 +36,17 @@ def generate_launch_description():
         description="Path to URDF/Xacro file within model_package",
     )
     declare_robot_name_cmd = DeclareLaunchArgument(
-        'robot_name',
-        default_value='',
+        "robot_name",
+        default_value="",
         description=(
-            'Name of the robot (specifying this will add the '
-            'robot name prefix to joints, links, etc. in the robot model).')
+            "Name of the robot (specifying this will add the "
+            "robot name prefix to joints, links, etc. in the robot model)."
+        ),
     )
     declare_namespace_cmd = DeclareLaunchArgument(
         "namespace",
         default_value="",
-        description="Namespace under which to bring up nodes, topics, etc."
+        description="Namespace under which to bring up nodes, topics, etc.",
     )
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         "use_sim_time", default_value="false", description="Use simulation time if true"
@@ -64,8 +65,9 @@ def generate_launch_description():
         "use_rviz", default_value="true", description="If true, launch RViz"
     )
     declare_use_rviz_config_template_cmd = DeclareLaunchArgument(
-        "use_rviz_config_template", default_value="true",
-        description="If true, generate the RViz config from the specified RViz config template."
+        "use_rviz_config_template",
+        default_value="true",
+        description="If true, generate the RViz config from the specified RViz config template.",
     )
     declare_rviz_config_template_cmd = DeclareLaunchArgument(
         "rviz_config_template",
@@ -77,11 +79,16 @@ def generate_launch_description():
         default_value=default_rviz_config_file,
         description="Path to the RViz config file",
     )
+    declare_use_lidar_cmd = DeclareLaunchArgument(
+        "use_lidar",
+        default_value="false",
+        description="If true, include the lidar in the robot description",
+    )
 
     # Launch Configurations
     model_package = LaunchConfiguration("model_package")
     model_file = LaunchConfiguration("model_file")
-    robot_name = LaunchConfiguration('robot_name')
+    robot_name = LaunchConfiguration("robot_name")
     namespace = LaunchConfiguration("namespace")
     use_sim_time = LaunchConfiguration("use_sim_time")
     use_jsp = LaunchConfiguration("use_jsp")
@@ -90,6 +97,7 @@ def generate_launch_description():
     use_rviz_config_template = LaunchConfiguration("use_rviz_config_template")
     rviz_config_template = LaunchConfiguration("rviz_config_template")
     rviz_config = LaunchConfiguration("rviz_config")
+    use_lidar = LaunchConfiguration("use_lidar")
 
     # Compute the robot prefix only if a robot name is provided
     # This expression will evaluate to, for example, "cohort_" if
@@ -111,6 +119,8 @@ def generate_launch_description():
             PathJoinSubstitution([FindPackageShare(model_package), model_file]),
             " ",
             robot_prefix_arg,
+            " use_lidar:=",
+            use_lidar,
         ]
     )
 
@@ -166,11 +176,22 @@ def generate_launch_description():
     )
     rviz_config_generator = ExecuteProcess(
         condition=IfCondition(use_rviz_config_template),
-        cmd=[["ARCS_COHORT_PREFIX='", robot_prefix, "' ",
-              "ARCS_COHORT_NAMESPACE='", namespace_env_var, "' ",
-              "envsubst < ", rviz_config_template, " > ", rviz_config]],
+        cmd=[
+            [
+                "ARCS_COHORT_PREFIX='",
+                robot_prefix,
+                "' ",
+                "ARCS_COHORT_NAMESPACE='",
+                namespace_env_var,
+                "' ",
+                "envsubst < ",
+                rviz_config_template,
+                " > ",
+                rviz_config,
+            ]
+        ],
         shell=True,
-        output='screen',
+        output="screen",
     )
 
     # RViz node
@@ -197,6 +218,7 @@ def generate_launch_description():
             declare_use_rviz_config_template_cmd,
             declare_rviz_config_template_cmd,
             declare_rviz_config_cmd,
+            declare_use_lidar_cmd,
             # Nodes
             push_namespace,
             rsp_node,
