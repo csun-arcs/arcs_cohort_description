@@ -7,13 +7,13 @@
     <joint name="laser_joint" type="fixed">
         <parent link="base_link"/>
         <child link="laser_frame"/>
-        <origin xyz="0.122 0 0.212" rpy="0 0 0"/>
+        <origin xyz="0 0 0.18" rpy="0 0 0"/>
     </joint>
 
     <!-- LiDAR Link -->
     <link name="laser_frame">
         <visual>
-            <origin xyz="-0.12 0 -0.05"/>
+            <origin xyz="0 0 -0.03"/>
             <geometry>
                 <!-- <cylinder radius="0.08" length="0.04"/> -->
                 <mesh filename="file://$(find arcs_cohort_description)/meshes/vlp-16.stl"/>
@@ -22,9 +22,9 @@
             <material name="yellow"/>
         </visual>
         <visual>
-            <origin xyz="-0.12 0 -0.09"/>
+            <origin xyz="0 0 -0.04"/>
             <geometry>
-                <cylinder radius="0.02" length="0.09"/>
+                <cylinder radius="0.02" length="0.13"/>
             </geometry>
             <material name="yellow"/>
         </visual>
