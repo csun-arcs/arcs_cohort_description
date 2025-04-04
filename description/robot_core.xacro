@@ -4,7 +4,7 @@
   <!-- Define a macro with a prefix param for the robot description -->
   <xacro:macro name="robot_description" params="prefix camera_name=zedm camera_model=zedm">
 
-    <!-- Arguments -->
+    <!-- Properties -->
     <xacro:property name="wheel_radius" value="0.08" />
     <xacro:property name="base_footprint_z_offset" value="0.0295" />
 
