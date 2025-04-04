@@ -19,7 +19,7 @@
     <!-- Build robot model -->
     <xacro:robot_description prefix="$(arg prefix)" camera_name="$(arg camera_name)" camera_model="$(arg camera_model)"/>
     <xacro:if value="$(arg use_lidar)">
-        <xacro:lidar_description prefix="$(arg prefix)" update_rate="$(arg lidar_update_rate)"/>
+        <xacro:lidar_description prefix="$(arg prefix)" lidar_update_rate="$(arg lidar_update_rate)"/>
     </xacro:if>
     <xacro:vectornav_imu_description prefix="$(arg prefix)"/>
     <xacro:zed_camera_description prefix="$(arg prefix)" camera_name="$(arg camera_name)" camera_model="$(arg camera_model)" resolution="$(arg camera_resolution)"/>

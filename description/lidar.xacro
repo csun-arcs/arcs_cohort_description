@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
     <!-- Define a lidar description macro -->
-    <xacro:macro name="lidar_description" params="prefix update_rate=30">
+    <xacro:macro name="lidar_description" params="prefix lidar_update_rate=30">
 
         <!-- Properties -->
         <xacro:property name="PI" value="3.1415926535897931" />
@@ -50,7 +50,7 @@
             <sensor name="laser" type="gpu_lidar">
                 <pose> 0 0 0 0 0 0 </pose>
                 <visualize>false</visualize>
-                <update_rate>$(arg update_rate)</update_rate>
+                <update_rate>$(arg lidar_update_rate)</update_rate>
                 <topic>scan</topic>
                 <gz_frame_id>laser_frame</gz_frame_id>
                 <lidar>
