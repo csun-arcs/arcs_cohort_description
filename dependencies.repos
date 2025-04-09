@@ -6,4 +6,4 @@ repositories:
   zed-ros2-interfaces:
     type: git
     url: git@github.com:stereolabs/zed-ros2-interfaces.git
-    version: master
+    version: humble
