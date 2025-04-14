@@ -13,7 +13,7 @@ The package is organized into the following folders, each serving a specific pur
 
 - **`launch/`**: Includes the launch file (e.g., `view_model.launch.py`) to bring up the robot description and related nodes. The launch file also supports several launch arguments for customization (see details below).
 
-- **`meshes/`**: Holds the STL (Stereolithography) mesh files used in the URDF. These files define the visual and collision geometry of the robot's components, referenced by the URDF for simulation and visualization.
+- **`meshes/`**: Holds the STL mesh files used in the URDF. These files define the visual and collision geometry of the robot's components, referenced by the URDF for simulation and visualization.
 
 - **`rviz_config/`**: Contains the RViz configuration file (e.g., `robot.rviz`) for visualizing the robot and its sensors in RViz, a 3D visualization tool for ROS.
 
