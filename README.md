@@ -11,7 +11,7 @@ The package is organized into the following folders, each serving a specific pur
   - LiDAR
   These files define the robot's physical structure and sensor integration for use in ROS2.
 
-- **`launch/`**: Includes the launch file (e.g., `robot_description.launch.py`) to bring up the robot description and related nodes. The launch file also supports several launch arguments for customization (see details below).
+- **`launch/`**: Includes the launch file (e.g., `view_model.launch.py`) to bring up the robot description and related nodes. The launch file also supports several launch arguments for customization (see details below).
 
 - **`meshes/`**: Holds the STL (Stereolithography) mesh files used in the URDF. These files define the visual and collision geometry of the robot's components, referenced by the URDF for simulation and visualization.
 
