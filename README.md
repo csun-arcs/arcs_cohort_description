@@ -44,6 +44,31 @@ The launch file, located in the `launch/` folder (assumed to be `robot_descripti
 - **`use_jsp_gui`**: Specifies if the joint state publisher should be launched with the GUI or not. 
   - **Default**: `false`
   - **Example**: `use_jsp_gui:=true`
+ 
+- - **`use_rviz`**: Launch rviz when set to true.
+  - **Default**: `true`
+  - **Example**: `use_rviz:=false`
+
+- **`use_rviz_config_template`**: If true, generate the RViz config from the specified RViz config template. 
+  - **Default**: `true`
+  - **Example**: `use_rviz_config_template:=false`
+ 
+- - **`rviz_config_template`**: Specifies path to the RViz config template file.
+  - **Default**: `default_rviz_config_template_file`
+  - **Example**: `rviz_config_template:=/home/your_workspace/src/arcs_cohort_description/rviz_config/your_config_template`
+
+- **`rviz_config`**: Specifies path to the RViz config file. 
+  - **Default**: `default_rviz_config_file`
+  - **Example**: `rviz_config:=/home/your_workspace/src/arcs_cohort_description/rviz_config/your_config_file`
+ 
+- - **`use_lidar`**: Specifies if we launch the model with the LiDAR or not.
+  - **Default**: `false`
+  - **Example**: `use_lidar:=false`
+
+- **`lidar_update_rate`**: Specifies the update rate of the LiDAR scan. 
+  - **Default**: `30`
+  - **Example**: `lidar_update_rate:=10`
+
 
 To set these arguments, use the following syntax when running the launch file:
 
