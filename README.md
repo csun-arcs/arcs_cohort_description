@@ -45,7 +45,7 @@ The launch file, located in the `launch/` folder (`view_model.launch.py`), is us
   - **Default**: `false`
   - **Example**: `use_jsp_gui:=true`
  
-- - **`use_rviz`**: Launch rviz when set to true.
+- **`use_rviz`**: Launch rviz when set to true.
   - **Default**: `true`
   - **Example**: `use_rviz:=false`
 
@@ -53,7 +53,7 @@ The launch file, located in the `launch/` folder (`view_model.launch.py`), is us
   - **Default**: `true`
   - **Example**: `use_rviz_config_template:=false`
  
-- - **`rviz_config_template`**: Specifies path to the RViz config template file.
+- **`rviz_config_template`**: Specifies path to the RViz config template file.
   - **Default**: `default_rviz_config_template_file`
   - **Example**: `rviz_config_template:=/home/your_workspace/src/arcs_cohort_description/rviz_config/your_config_template`
 
@@ -61,7 +61,7 @@ The launch file, located in the `launch/` folder (`view_model.launch.py`), is us
   - **Default**: `default_rviz_config_file`
   - **Example**: `rviz_config:=/home/your_workspace/src/arcs_cohort_description/rviz_config/your_config_file`
  
-- - **`use_lidar`**: Specifies if we launch the model with the LiDAR or not.
+- **`use_lidar`**: Specifies if we launch the model with the LiDAR or not.
   - **Default**: `false`
   - **Example**: `use_lidar:=false`
 
