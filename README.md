@@ -19,7 +19,7 @@ The package is organized into the following folders, each serving a specific pur
 
 ## Launch File and Arguments
 
-The launch file, located in the `launch/` folder (assumed to be `view_model.launch.py`), is used to load the robot description and start necessary ROS2 nodes. It includes several launch arguments to configure the launch process. Below are examples of possible arguments (adjust based on your specific implementation):
+The launch file, located in the `launch/` folder (`view_model.launch.py`), is used to load the robot description and start necessary ROS2 nodes. It includes several launch arguments to configure the launch process. Below are examples of possible arguments (adjust based on your specific implementation):
 
 - **`model_file`**: A path to manually specify the path of the robot model.
   - **Default**: `arcs_cohort_description`
