@@ -38,11 +38,11 @@ The launch file, located in the `launch/` folder (assumed to be `robot_descripti
   - **Example**: `use_sim_time:=false`
 
 - **`use_jsp`**: Specifies if the joint state publisher should be launched or not. It will be set to true when only using rviz.
-  - **Default**: `'true'`
+  - **Default**: `true`
   - **Example**: `use_jsp:=false`
 
 - **`use_jsp_gui`**: Specifies if the joint state publisher should be launched with the GUI or not. 
-  - **Default**: `'false'`
+  - **Default**: `false`
   - **Example**: `use_jsp_gui:=true`
 
 To set these arguments, use the following syntax when running the launch file:
