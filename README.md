@@ -21,17 +21,29 @@ The package is organized into the following folders, each serving a specific pur
 
 The launch file, located in the `launch/` folder (assumed to be `robot_description.launch.py`), is used to load the robot description and start necessary ROS2 nodes. It includes several launch arguments to configure the launch process. Below are examples of possible arguments (adjust based on your specific implementation):
 
-- **`use_sim_time`**: A boolean to determine whether to use simulation time (e.g., from a simulator like Gazebo) or real-time.
-  - **Default**: `false`
-  - **Example**: `use_sim_time:=true`
+- **`model_file`**: A path to manually specify the path of the robot model.
+  - **Default**: `arcs_cohort_description`
+  - **Example**: `model_file:=/home/your_workspace/src/arcs_cohort_description/robot.urdf.xacro`
 
 - **`robot_name`**: Specifies the name of the robot, useful for multi-robot scenarios or namespaces.
-  - **Default**: `'arcs_robot'`
+  - **Default**: `''`
   - **Example**: `robot_name:=my_robot`
 
-- **`sensors`**: A list of sensors to include in the robot description, allowing users to enable or disable specific sensors.
-  - **Default**: `['zed_mini', 'imu', 'lidar']`
-  - **Example**: `sensors:='["zed_mini"]'`
+- **`namespace`**: Namespace under which to bring up nodes, topics, etc.
+  - **Default**: `''`
+  - **Example**: `namespace:=my_namespace`
+ 
+- **`use_sim_time`**: A boolean to determine whether to use simulation time (e.g., from a simulator like Gazebo) or real-time.
+  - **Default**: `true`
+  - **Example**: `use_sim_time:=false`
+
+- **`use_jsp`**: Specifies if the joint state publisher should be launched or not. It will be set to true when only using rviz.
+  - **Default**: `'true'`
+  - **Example**: `use_jsp:=false`
+
+- **`use_jsp_gui`**: Specifies if the joint state publisher should be launched with the GUI or not. 
+  - **Default**: `'false'`
+  - **Example**: `use_jsp_gui:=true`
 
 To set these arguments, use the following syntax when running the launch file:
 
