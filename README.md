@@ -1,6 +1,7 @@
 # ARCS Cohort Description Package
 
-This package provides the description of the ARCS cohort robot, including its URDF model and sensor configurations, for use in ROS2 Jazzy. It enables users to simulate and visualize the robot in RViz.
+This package provides the description of the ARCS CoHORT rover, including its URDF model and sensor configurations, for use in ROS 2. It enables users to simulate and visualize the robot in RViz and Gazebo.
+
 ## Folder Structure
 
 The package is organized into the following folders, each serving a specific purpose:
@@ -17,9 +18,9 @@ The package is organized into the following folders, each serving a specific pur
 
 - **`rviz_config/`**: Contains the RViz configuration file (e.g., `robot.rviz`) for visualizing the robot and its sensors in RViz, a 3D visualization tool for ROS.
 
-## Launch File and Arguments
+## Model Test Launch File and Arguments
 
-The launch file, located in the `launch/` folder (`view_model.launch.py`), is used to load the robot description and start necessary ROS2 nodes. It includes several launch arguments to configure the launch process. Below are examples of possible arguments (adjust based on your specific implementation):
+A test launch file (`launch/view_model.launch.py`) is provided that allows for the model to be visualized in RViz. It includes several launch arguments to configure the launch process. Below are examples of possible arguments (adjust based on your specific implementation):
 
 - **`model_file`**: A path to manually specify the path of the robot model.
   - **Default**: `arcs_cohort_description`
@@ -69,8 +70,11 @@ The launch file, located in the `launch/` folder (`view_model.launch.py`), is us
   - **Default**: `30`
   - **Example**: `lidar_update_rate:=10`
 
-
 To set these arguments, use the following syntax when running the launch file:
 
 ```bash
 ros2 launch arcs_cohort_description view_model.launch.py arg:=value
+
+### RViz Config Template
+
+Note that the RViz config can be provided either directly (using the `rviz_config` argument) or via a template (using the `rviz_config_template` argument).  The template will only be used if the `use_rviz_config_template` argument is set to `true`.  If the RViz template is in use, certain template variables (e.g. the robot prefix and namespace) will be filled out dynamically when the template is processed prior to the RViz node being launched.  Using the RViz template allows for the `view_model.launch.py` launcher to handle different robot prefixes and namespaces (and potentially other variables if the template is adapted for it) that are passed as arguments and adapt the dynamically adapt the RViz configuration such that the model can be successfully visualized.  This enables users to easily test the prefix and namespace features.
