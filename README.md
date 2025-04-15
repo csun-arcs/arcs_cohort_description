@@ -18,7 +18,7 @@ The package is organized into the following folders, each serving a specific pur
 
 - **`rviz_config/`**: Contains the RViz configuration file (e.g., `robot.rviz`) for visualizing the robot and its sensors in RViz, a 3D visualization tool for ROS.
 
-## Model Test Launch File and Arguments
+## Model Test Viewer Launch File and Arguments
 
 A test launch file (`launch/view_model.launch.py`) is provided that allows for the model to be visualized in RViz. It includes several launch arguments to configure the launch process. Below are examples of possible arguments (adjust based on your specific implementation):
 
@@ -74,6 +74,7 @@ To set these arguments, use the following syntax when running the launch file:
 
 ```bash
 ros2 launch arcs_cohort_description view_model.launch.py arg:=value
+```
 
 ### RViz Config Template
 
