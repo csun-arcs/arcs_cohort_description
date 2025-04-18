@@ -12,29 +12,22 @@ https://github.com/rpanther/panther_simulation/blob/master/panther_gazebo/urdf
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
-
     <!-- Define a macro with a prefix param for the Zed M camera description -->
     <xacro:macro name="zed_camera_description" params="prefix camera_name=zedm camera_model=zedm resolution=VGA">
 
-        <!-- Arguments for zed_wrapper/zed_camera -->
-        <xacro:arg name="custom_baseline"  default="0.0" />
-        <xacro:arg name="enable_gnss"   default="false" />
-        <xacro:arg name="gnss_x" default="0.0" />
-        <xacro:arg name="gnss_y" default="0.0" />
-        <xacro:arg name="gnss_z" default="0.0" />
+        <!-- Properties -->
+        <xacro:if value="${prefix != ''}">
+            <xacro:property name="prefix_" value="${prefix}_"/>
+        </xacro:if>
+        <xacro:if value="${prefix == ''}">
+            <xacro:property name="prefix_" value=""/>
+        </xacro:if>
 
-        <!-- Include zed_wrapper/zed_camera description -->
-        <xacro:include filename="$(find zed_wrapper)/urdf/zed_macro.urdf.xacro" />
-        <xacro:zed_camera name="$(arg camera_name)" model="$(arg camera_model)" custom_baseline="$(arg custom_baseline)" enable_gnss="$(arg enable_gnss)">
-                <origin xyz="$(arg gnss_x) $(arg gnss_y) $(arg gnss_z)" rpy="0 0 0"/>
-        </xacro:zed_camera>
-
-        <!--Camera-->
-        <joint name="${prefix}${camera_name}_camera_mount_to_camera" type="fixed">
-            <parent link="${prefix}${camera_name}_camera_mount_link"/>
-            <child link="${camera_name}_camera_link"/>
-            <origin xyz="0.037592 -0.0065 -0.02273" rpy="0 ${30*(M_PI/180)} 0" />
-        </joint>
+        <xacro:property name="custom_baseline" value="0.0" />
+        <xacro:property name="enable_gnss" value="false" />
+        <xacro:property name="gnss_x" value="0.0" />
+        <xacro:property name="gnss_y" value="0.0" />
+        <xacro:property name="gnss_z" value="0.0" />
 
         <xacro:if value="${resolution == 'HD2K'}">
             <xacro:property name="resolution_width" value="2208" />
@@ -67,6 +60,7 @@ https://github.com/rpanther/panther_simulation/blob/master/panther_gazebo/urdf
                 <material>Gazebo/Grey</material>
             </gazebo>
         </xacro:if>
+
         <xacro:if value="${camera_model == 'zedm'}">
             <xacro:property name="baseline" value="0.06" />
             <xacro:property name="fov" value="2.0" />
@@ -79,6 +73,7 @@ https://github.com/rpanther/panther_simulation/blob/master/panther_gazebo/urdf
                 <material>Gazebo/DarkGrey</material>
             </gazebo>
         </xacro:if>
+
         <xacro:if value="${camera_model == 'zed2'}">
             <xacro:property name="baseline" value="0.12" />
             <xacro:property name="fov" value="1.8" />
@@ -92,9 +87,22 @@ https://github.com/rpanther/panther_simulation/blob/master/panther_gazebo/urdf
             </gazebo>
         </xacro:if>
 
+        <!-- Include zed_wrapper/zed_camera description -->
+        <xacro:include filename="$(find zed_wrapper)/urdf/zed_macro.urdf.xacro" />
+        <xacro:zed_camera name="$(arg camera_name)" model="$(arg camera_model)" custom_baseline="${custom_baseline}" enable_gnss="${enable_gnss}">
+                <origin xyz="${gnss_x} ${gnss_y} ${gnss_z}" rpy="0 0 0"/>
+        </xacro:zed_camera>
+
+        <!--Camera-->
+        <joint name="${prefix_}${camera_name}_camera_mount_to_camera" type="fixed">
+            <parent link="${prefix_}${camera_name}_camera_mount_link"/>
+            <child link="${camera_name}_camera_link"/>
+            <origin xyz="0.037592 -0.0065 -0.02273" rpy="0 ${30*(M_PI/180)} 0" />
+        </joint>
+
         <!-- Left Camera Gazebo -->
         <gazebo reference="${camera_name}_left_camera_frame">
-            <sensor name="${prefix}left_camera" type="rgbd_camera">
+            <sensor name="${prefix_}left_camera" type="rgbd_camera">
                 <topic>camera/left_camera</topic>
                 <gz_frame_id>${camera_name}_left_camera_frame</gz_frame_id>
                 <always_on>1</always_on>
@@ -118,7 +126,7 @@ https://github.com/rpanther/panther_simulation/blob/master/panther_gazebo/urdf
 
         <!-- Right Camera Gazebo -->
         <gazebo reference="${camera_name}_right_camera_frame">
-            <sensor name="${prefix}right_camera" type="camera">
+            <sensor name="${prefix_}right_camera" type="camera">
                 <topic>camera/right_camera/image</topic>
                 <gz_frame_id>${camera_name}_right_camera_frame</gz_frame_id>
                 <visualize>true</visualize>

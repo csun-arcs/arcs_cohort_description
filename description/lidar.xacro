@@ -1,21 +1,29 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
-    <!-- Properties -->
-    <xacro:property name="PI" value="3.1415926535897931" />
 
     <!-- Define a lidar description macro -->
     <xacro:macro name="lidar_description" params="prefix lidar_update_rate=30">
 
+        <!-- Properties -->
+        <xacro:if value="${prefix != ''}">
+            <xacro:property name="prefix_" value="${prefix}_"/>
+        </xacro:if>
+        <xacro:if value="${prefix == ''}">
+            <xacro:property name="prefix_" value=""/>
+        </xacro:if>
+
+        <xacro:property name="PI" value="3.1415926535897931" />
+
         <!-- LiDAR Joint -->
-        <joint name="laser_joint" type="fixed">
-            <parent link="base_link"/>
-            <child link="laser_frame"/>
+        <joint name="${prefix_}laser_joint" type="fixed">
+            <parent link="${prefix_}base_link"/>
+            <child link="${prefix_}laser_frame"/>
             <origin xyz="0 0 0.18" rpy="0 0 0"/>
         </joint>
 
         <!-- LiDAR Link -->
-        <link name="laser_frame">
+        <link name="${prefix_}laser_frame">
             <visual>
                 <origin xyz="0 0 -0.03"/>
                 <geometry>
@@ -45,14 +53,14 @@
         </link>
 
         <!-- LiDAR Gazebo -->
-        <gazebo reference="laser_frame">
+        <gazebo reference="${prefix_}laser_frame">
             <!-- <material>Gazebo/Black</material> -->
             <sensor name="laser" type="gpu_lidar">
                 <pose> 0 0 0 0 0 0 </pose>
                 <visualize>false</visualize>
                 <update_rate>$(arg lidar_update_rate)</update_rate>
                 <topic>lidar/scan</topic>
-                <gz_frame_id>laser_frame</gz_frame_id>
+                <gz_frame_id>${prefix_}laser_frame</gz_frame_id>
                 <lidar>
                     <scan>
                         <horizontal>

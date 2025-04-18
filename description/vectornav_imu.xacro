@@ -4,7 +4,15 @@
   <!-- Define a macro with a prefix param for the VectorNav IMU description -->
   <xacro:macro name="vectornav_imu_description" params="prefix">
 
-    <gazebo reference="${prefix}imu_link">
+    <!-- Properties -->
+    <xacro:if value="${prefix != ''}">
+        <xacro:property name="prefix_" value="${prefix}_"/>
+    </xacro:if>
+    <xacro:if value="${prefix == ''}">
+        <xacro:property name="prefix_" value=""/>
+    </xacro:if>
+
+    <gazebo reference="${prefix_}imu_link">
         <sensor name="vn100_imu" type="imu">
             <always_on>true</always_on>
             <update_rate>800</update_rate>
