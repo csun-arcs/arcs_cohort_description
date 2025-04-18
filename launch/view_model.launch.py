@@ -25,17 +25,17 @@ def generate_launch_description():
     )
 
     # Launch arguments
-    declare_model_package_cmd = DeclareLaunchArgument(
+    declare_model_package_arg = DeclareLaunchArgument(
         "model_package",
         default_value="arcs_cohort_description",
         description="Package with the robot model file",
     )
-    declare_model_file_cmd = DeclareLaunchArgument(
+    declare_model_file_arg = DeclareLaunchArgument(
         "model_file",
         default_value=default_model_file,
         description="Path to URDF/Xacro file within model_package",
     )
-    declare_robot_name_cmd = DeclareLaunchArgument(
+    declare_robot_name_arg = DeclareLaunchArgument(
         "robot_name",
         default_value="",
         description=(
@@ -43,48 +43,48 @@ def generate_launch_description():
             "robot name prefix to joints, links, etc. in the robot model)."
         ),
     )
-    declare_namespace_cmd = DeclareLaunchArgument(
+    declare_namespace_arg = DeclareLaunchArgument(
         "namespace",
         default_value="",
         description="Namespace under which to bring up nodes, topics, etc.",
     )
-    declare_use_sim_time_cmd = DeclareLaunchArgument(
+    declare_use_sim_time_arg = DeclareLaunchArgument(
         "use_sim_time", default_value="false", description="Use simulation time if true"
     )
-    declare_use_jsp_cmd = DeclareLaunchArgument(
+    declare_use_jsp_arg = DeclareLaunchArgument(
         "use_jsp",
         default_value="true",
         description="If true, launch the joint_state_publisher (CLI)",
     )
-    declare_use_jsp_gui_cmd = DeclareLaunchArgument(
+    declare_use_jsp_gui_arg = DeclareLaunchArgument(
         "use_jsp_gui",
         default_value="false",
         description="If true, launch the joint_state_publisher_gui",
     )
-    declare_use_rviz_cmd = DeclareLaunchArgument(
+    declare_use_rviz_arg = DeclareLaunchArgument(
         "use_rviz", default_value="true", description="If true, launch RViz"
     )
-    declare_use_rviz_config_template_cmd = DeclareLaunchArgument(
+    declare_use_rviz_config_template_arg = DeclareLaunchArgument(
         "use_rviz_config_template",
         default_value="true",
         description="If true, generate the RViz config from the specified RViz config template.",
     )
-    declare_rviz_config_template_cmd = DeclareLaunchArgument(
+    declare_rviz_config_template_arg = DeclareLaunchArgument(
         "rviz_config_template",
         default_value=default_rviz_config_template_file,
         description="Path to the RViz config template file",
     )
-    declare_rviz_config_cmd = DeclareLaunchArgument(
+    declare_rviz_config_arg = DeclareLaunchArgument(
         "rviz_config",
         default_value=default_rviz_config_file,
         description="Path to the RViz config file",
     )
-    declare_use_lidar_cmd = DeclareLaunchArgument(
+    declare_use_lidar_arg = DeclareLaunchArgument(
         "use_lidar",
         default_value="false",
         description="If true, include the lidar in the robot description",
     )
-    declare_lidar_update_rate_cmd = DeclareLaunchArgument(
+    declare_lidar_update_rate_arg = DeclareLaunchArgument(
         "lidar_update_rate",
         default_value="30",
         description="Set the update rate of the LiDAR sensor.",
@@ -215,19 +215,19 @@ def generate_launch_description():
     return LaunchDescription(
         [
             # Declare launch arguments
-            declare_model_package_cmd,
-            declare_model_file_cmd,
-            declare_robot_name_cmd,
-            declare_namespace_cmd,
-            declare_use_sim_time_cmd,
-            declare_use_jsp_cmd,
-            declare_use_jsp_gui_cmd,
-            declare_use_rviz_cmd,
-            declare_use_rviz_config_template_cmd,
-            declare_rviz_config_template_cmd,
-            declare_rviz_config_cmd,
-            declare_use_lidar_cmd,
-            declare_lidar_update_rate_cmd,
+            declare_model_package_arg,
+            declare_model_file_arg,
+            declare_robot_name_arg,
+            declare_namespace_arg,
+            declare_use_sim_time_arg,
+            declare_use_jsp_arg,
+            declare_use_jsp_gui_arg,
+            declare_use_rviz_arg,
+            declare_use_rviz_config_template_arg,
+            declare_rviz_config_template_arg,
+            declare_rviz_config_arg,
+            declare_use_lidar_arg,
+            declare_lidar_update_rate_arg,
             # Nodes
             push_namespace,
             rsp_node,
