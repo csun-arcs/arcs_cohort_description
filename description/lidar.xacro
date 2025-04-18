@@ -51,7 +51,7 @@
                 <pose> 0 0 0 0 0 0 </pose>
                 <visualize>false</visualize>
                 <update_rate>$(arg lidar_update_rate)</update_rate>
-                <topic>scan</topic>
+                <topic>lidar/scan</topic>
                 <gz_frame_id>laser_frame</gz_frame_id>
                 <lidar>
                     <scan>
