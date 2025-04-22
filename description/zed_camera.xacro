@@ -13,7 +13,7 @@ https://github.com/rpanther/panther_simulation/blob/master/panther_gazebo/urdf
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
     <!-- Define a macro with a prefix param for the Zed M camera description -->
-    <xacro:macro name="zed_camera_description" params="prefix camera_name=zedm camera_model=zedm resolution=VGA">
+    <xacro:macro name="zed_camera_description" params="namespace prefix camera_name=zedm camera_model=zedm resolution=VGA">
 
         <!-- Properties -->
         <xacro:if value="${prefix != ''}">
@@ -89,27 +89,27 @@ https://github.com/rpanther/panther_simulation/blob/master/panther_gazebo/urdf
 
         <!-- Include zed_wrapper/zed_camera description -->
         <xacro:include filename="$(find zed_wrapper)/urdf/zed_macro.urdf.xacro" />
-        <xacro:zed_camera name="$(arg camera_name)" model="$(arg camera_model)" custom_baseline="${custom_baseline}" enable_gnss="${enable_gnss}">
-                <origin xyz="${gnss_x} ${gnss_y} ${gnss_z}" rpy="0 0 0"/>
+        <xacro:zed_camera name="${prefix_ + camera_name}" model="$(arg camera_model)" custom_baseline="${custom_baseline}" enable_gnss="${enable_gnss}">
+            <origin xyz="${gnss_x} ${gnss_y} ${gnss_z}" rpy="0 0 0"/>
         </xacro:zed_camera>
 
         <!--Camera-->
-        <joint name="${prefix_}${camera_name}_camera_mount_to_camera" type="fixed">
-            <parent link="${prefix_}${camera_name}_camera_mount_link"/>
-            <child link="${camera_name}_camera_link"/>
+        <joint name="${prefix_ + camera_name}_camera_mount_to_camera" type="fixed">
+            <parent link="${prefix_ + camera_name}_camera_mount_link"/>
+            <child link="${prefix_ + camera_name}_camera_link"/>
             <origin xyz="0.037592 -0.0065 -0.02273" rpy="0 ${30*(M_PI/180)} 0" />
         </joint>
 
         <!-- Left Camera Gazebo -->
-        <gazebo reference="${camera_name}_left_camera_frame">
+        <gazebo reference="${prefix_ + camera_name}_left_camera_frame">
             <sensor name="${prefix_}left_camera" type="rgbd_camera">
-                <topic>camera/left_camera</topic>
-                <gz_frame_id>${camera_name}_left_camera_frame</gz_frame_id>
+                <topic>${namespace}/camera/left_camera</topic>
+                <gz_frame_id>${prefix_ + camera_name}_left_camera_frame</gz_frame_id>
                 <always_on>1</always_on>
                 <update_rate>${update_rate}</update_rate>
                 <visualize>true</visualize>
                 <camera>
-                    <camera_info_topic>camera/left_camera_info</camera_info_topic>
+                    <camera_info_topic>${namespace}/camera/left_camera_info</camera_info_topic>
                     <horizontal_fov>${fov}</horizontal_fov>
                     <image>
                         <format>R8G8B8</format>
@@ -125,14 +125,14 @@ https://github.com/rpanther/panther_simulation/blob/master/panther_gazebo/urdf
         </gazebo>
 
         <!-- Right Camera Gazebo -->
-        <gazebo reference="${camera_name}_right_camera_frame">
+        <gazebo reference="${prefix_ + camera_name}_right_camera_frame">
             <sensor name="${prefix_}right_camera" type="camera">
-                <topic>camera/right_camera/image</topic>
-                <gz_frame_id>${camera_name}_right_camera_frame</gz_frame_id>
+                <topic>${namespace}/camera/right_camera/image</topic>
+                <gz_frame_id>${prefix_ + camera_name}_right_camera_frame</gz_frame_id>
                 <visualize>true</visualize>
                 <update_rate>${update_rate}</update_rate>
                 <camera>
-                    <camera_info_topic>camera/right_camera/camera_info</camera_info_topic>
+                    <camera_info_topic>${namespace}/camera/right_camera/camera_info</camera_info_topic>
                     <horizontal_fov>${fov}</horizontal_fov>
                     <image>
                         <format>R8G8B8</format>

@@ -3,7 +3,7 @@
 
 
     <!-- Define a lidar description macro -->
-    <xacro:macro name="lidar_description" params="prefix lidar_update_rate=30">
+    <xacro:macro name="lidar_description" params="namespace prefix lidar_update_rate=30">
 
         <!-- Properties -->
         <xacro:if value="${prefix != ''}">
@@ -59,7 +59,7 @@
                 <pose> 0 0 0 0 0 0 </pose>
                 <visualize>false</visualize>
                 <update_rate>$(arg lidar_update_rate)</update_rate>
-                <topic>lidar/scan</topic>
+                <topic>${namespace}/lidar/scan</topic>
                 <gz_frame_id>${prefix_}laser_frame</gz_frame_id>
                 <lidar>
                     <scan>
