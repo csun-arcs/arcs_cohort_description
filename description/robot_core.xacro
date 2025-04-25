@@ -250,53 +250,6 @@
       <axis xyz="0 0 -1" />
     </joint>
 
-    <link name="${prefix_}imu_link">
-      <inertial>
-        <origin
-          xyz="-0.000894812057582933 9.60259274576658E-06 -0.00456943294796108"
-          rpy="0 0 0" />
-        <mass
-          value="0.0065760792742103" />
-        <inertia
-          ixx="3.78511408547619E-07"
-          ixy="4.67820105640642E-11"
-          ixz="1.00912927862616E-08"
-          iyy="3.79926110271894E-07"
-          iyz="-5.01543493566598E-12"
-          izz="7.19032056380139E-07" />
-      </inertial>
-      <visual>
-        <origin
-          xyz="0 0 0"
-          rpy="0 0 0" />
-        <geometry>
-          <mesh
-            filename="file://$(find arcs_cohort_description)/meshes/new_imu.stl" />
-        </geometry>
-        <material
-          name="">
-          <color
-            rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-        </material>
-      </visual>
-      <collision>
-        <origin
-          xyz="0 0 0"
-          rpy="0 0 0" />
-        <geometry>
-          <mesh
-            filename="file://$(find arcs_cohort_description)/meshes/new_imu.stl" />
-          <!-- <box size = "0.03 0.025 0.01"/> -->
-        </geometry>
-      </collision>
-    </link>
-    <joint name="${prefix_}imu_joint" type="fixed">
-      <origin xyz="0.0022791 0.00028171 0.01489" rpy="0 0 0" />
-      <parent link="${prefix_}base_link" />
-      <child link="${prefix_}imu_link" />
-      <axis xyz="0 0 0" />
-    </joint>
-
     <link name="${prefix_}${camera_name}_camera_mount_link">
       <inertial>
         <origin
