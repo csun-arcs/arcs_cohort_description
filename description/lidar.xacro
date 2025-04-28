@@ -5,7 +5,7 @@
     <xacro:property name="PI" value="3.1415926535897931" />
 
     <!-- Define a lidar description macro -->
-    <xacro:macro name="lidar_description" params="prefix lidar_update_rate=30">
+    <xacro:macro name="lidar_description" params="prefix">
 
         <!-- LiDAR Joint -->
         <joint name="${prefix}laser_joint" type="fixed">
