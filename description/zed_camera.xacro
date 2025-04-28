@@ -14,7 +14,8 @@ https://github.com/rpanther/panther_simulation/blob/master/panther_gazebo/urdf
 
 
     <!-- Define a macro with a prefix param for the Zed M camera description -->
-    <xacro:macro name="zed_camera_description" params="prefix camera_name=zedm camera_model=zedm resolution=VGA">
+    <xacro:macro name="zed_camera_description" params="prefix camera_name=zedm camera_model=zedm">
+        <!-- resolution=VGA -->
 
         <!-- Arguments for zed_wrapper/zed_camera -->
         <xacro:arg name="custom_baseline"  default="0.0" />

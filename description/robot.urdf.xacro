@@ -5,9 +5,7 @@
     <xacro:arg name="prefix" default="" />
     <xacro:arg name="camera_name" default="zedm" />
     <xacro:arg name="camera_model" default="zedm" />
-    <xacro:arg name="camera_resolution" default="HD720" />
     <xacro:arg name="use_lidar" default="false" />
-    <xacro:arg name="lidar_update_rate" default="30" />
 
     <!-- Includes -->
     <xacro:include filename="robot_core.xacro"/>
@@ -20,9 +18,10 @@
     <!-- Build robot model -->
     <xacro:robot_description prefix="$(arg prefix)" camera_name="$(arg camera_name)" camera_model="$(arg camera_model)"/>
     <xacro:if value="$(arg use_lidar)">
-        <xacro:lidar_description prefix="$(arg prefix)" lidar_update_rate="$(arg lidar_update_rate)"/>
+        <xacro:lidar_description prefix="$(arg prefix)"/> 
     </xacro:if>
     <xacro:vectornav_imu_description prefix="$(arg prefix)"/>
-    <xacro:zed_camera_description prefix="$(arg prefix)" camera_name="$(arg camera_name)" camera_model="$(arg camera_model)" resolution="$(arg camera_resolution)"/>
+    <xacro:zed_camera_description prefix="$(arg prefix)" camera_name="$(arg camera_name)" camera_model="$(arg camera_model)"/>
+
 
 </robot>
