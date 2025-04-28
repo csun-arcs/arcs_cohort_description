@@ -2,9 +2,17 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
   <!-- Define a macro with a prefix param for the VectorNav IMU description -->
-  <xacro:macro name="vectornav_imu_description" params="prefix">
+  <xacro:macro name="vectornav_imu_description" params="namespace prefix">
 
-    <link name="${prefix}imu_link">
+    <!-- Properties -->
+    <xacro:if value="${prefix != ''}">
+        <xacro:property name="prefix_" value="${prefix}_"/>
+    </xacro:if>
+    <xacro:if value="${prefix == ''}">
+        <xacro:property name="prefix_" value=""/>
+    </xacro:if>
+
+    <link name="${prefix_}imu_link">
         <inertial>
             <origin
                 xyz="-0.000894812057582933 9.60259274576658E-06 -0.00456943294796108"
@@ -44,10 +52,10 @@
             </geometry>
         </collision>
     </link>
-    <joint name="${prefix}imu_joint" type="fixed">
+    <joint name="${prefix_}imu_joint" type="fixed">
         <origin xyz="0.0022791 0.00028171 0.01489" rpy="0 0 0" />
-        <parent link="${prefix}base_link" />
-        <child link="${prefix}imu_link" />
+        <parent link="${prefix_}base_link" />
+        <child link="${prefix_}imu_link" />
         <axis xyz="0 0 0" />
     </joint>
 

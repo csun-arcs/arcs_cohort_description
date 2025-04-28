@@ -1,10 +1,17 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <!-- Define a macro with a prefix param for the robot description -->
+  <!-- Define a macro for the robot description -->
   <xacro:macro name="robot_description" params="prefix camera_name=zedm camera_model=zedm">
 
     <!-- Properties -->
+    <xacro:if value="${prefix != ''}">
+      <xacro:property name="prefix_" value="${prefix}_"/>
+    </xacro:if>
+    <xacro:if value="${prefix == ''}">
+      <xacro:property name="prefix_" value=""/>
+    </xacro:if>
+
     <xacro:property name="wheel_radius" value="0.08" />
     <xacro:property name="base_footprint_z_offset" value="0.0295" />
 
@@ -25,7 +32,7 @@
       <color rgba="1 0 0 1"/>
     </material>
 
-    <link name="${prefix}base_link">
+    <link name="${prefix_}base_link">
       <inertial>
         <origin
           xyz="0.00180125809402712 0.000803676445247231 0.01518679730351"
@@ -63,14 +70,14 @@
     </link>
 
     <!-- Robot Footprint -->
-    <link name="${prefix}base_footprint"/>
-    <joint name="${prefix}base_joint" type="fixed">
-      <parent link="${prefix}base_link"/>
-      <child link="${prefix}base_footprint"/>
+    <link name="${prefix_}base_footprint"/>
+    <joint name="${prefix_}base_joint" type="fixed">
+      <parent link="${prefix_}base_link"/>
+      <child link="${prefix_}base_footprint"/>
       <origin xyz="0.0 0.0 -${wheel_radius + base_footprint_z_offset}" rpy="0 0 0"/>
     </joint>
 
-    <link name="${prefix}front_left_wheel_link">
+    <link name="${prefix_}front_left_wheel_link">
       <inertial>
         <origin
           xyz="-2.6737853597858E-10 1.57494023378391E-09 0.00586031499671241"
@@ -107,14 +114,14 @@
         </geometry>
       </collision>
     </link>
-    <joint name="${prefix}front_left_wheel_joint" type="continuous">
+    <joint name="${prefix_}front_left_wheel_joint" type="continuous">
       <origin xyz="0.12851 0.11738 -0.022625" rpy="-1.5708 0 0" />
-      <parent link="${prefix}base_link" />
-      <child link="${prefix}front_left_wheel_link" />
+      <parent link="${prefix_}base_link" />
+      <child link="${prefix_}front_left_wheel_link" />
       <axis xyz="0 0 1" />
     </joint>
 
-    <link name="${prefix}front_right_wheel_link">
+    <link name="${prefix_}front_right_wheel_link">
       <inertial>
         <origin
           xyz="-1.3376E-09 -8.8541E-10 0.0058603"
@@ -150,14 +157,14 @@
         </geometry>
       </collision>
     </link>
-    <joint name="${prefix}front_right_wheel_joint" type="continuous">
+    <joint name="${prefix_}front_right_wheel_joint" type="continuous">
       <origin xyz="0.12051 -0.11682 -0.022625" rpy="1.5708 0 0" />
-      <parent link="${prefix}base_link" />
-      <child link="${prefix}front_right_wheel_link" />
+      <parent link="${prefix_}base_link" />
+      <child link="${prefix_}front_right_wheel_link" />
       <axis xyz="0 0 -1" />
     </joint>
 
-    <link name="${prefix}back_left_wheel_link">
+    <link name="${prefix_}back_left_wheel_link">
       <inertial>
         <origin
           xyz="-9.53E-10 -1.113E-09 0.0058603"
@@ -193,14 +200,14 @@
         </geometry>
       </collision>
     </link>
-    <joint name="${prefix}back_left_wheel_joint" type="continuous">
+    <joint name="${prefix_}back_left_wheel_joint" type="continuous">
       <origin xyz="-0.11949 0.11738 -0.022625" rpy="-1.5708 0 0" />
-      <parent link="${prefix}base_link" />
-      <child link="${prefix}back_left_wheel_link" />
+      <parent link="${prefix_}base_link" />
+      <child link="${prefix_}back_left_wheel_link" />
       <axis xyz="0 0 1" />
     </joint>
 
-    <link name="${prefix}back_right_wheel_link">
+    <link name="${prefix_}back_right_wheel_link">
       <inertial>
         <origin
           xyz="-3.4938159310105E-10 -6.88384349523119E-11 0.00586031504576194"
@@ -236,14 +243,14 @@
         </geometry>
       </collision>
     </link>
-    <joint name="${prefix}back_right_wheel_joint" type="continuous">
+    <joint name="${prefix_}back_right_wheel_joint" type="continuous">
       <origin xyz="-0.12749 -0.11682 -0.022625" rpy="1.5708 0 0" />
-      <parent link="${prefix}base_link" />
-      <child link="${prefix}back_right_wheel_link" />
+      <parent link="${prefix_}base_link" />
+      <child link="${prefix_}back_right_wheel_link" />
       <axis xyz="0 0 -1" />
     </joint>
 
-    <link name="${prefix}${camera_name}_camera_mount_link">
+    <link name="${prefix_}${camera_name}_camera_mount_link">
       <inertial>
         <origin
           xyz="0 0 0"
@@ -279,10 +286,10 @@
         </geometry>
       </collision>
     </link>
-    <joint name="${prefix}camera_mount_joint" type="fixed">
+    <joint name="${prefix_}camera_mount_joint" type="fixed">
       <origin xyz="0.14426 0.00028171 0.094535" rpy="0 0 0" />
-      <parent link="${prefix}base_link" />
-      <child link="${prefix}${camera_name}_camera_mount_link" />
+      <parent link="${prefix_}base_link" />
+      <child link="${prefix_}${camera_name}_camera_mount_link" />
       <axis xyz="0 0 0" />
     </joint>
 

@@ -25,66 +25,67 @@ def generate_launch_description():
     )
 
     # Launch arguments
-    declare_model_package_cmd = DeclareLaunchArgument(
+    declare_model_package_arg = DeclareLaunchArgument(
         "model_package",
         default_value="arcs_cohort_description",
         description="Package with the robot model file",
     )
-    declare_model_file_cmd = DeclareLaunchArgument(
+    declare_model_file_arg = DeclareLaunchArgument(
         "model_file",
         default_value=default_model_file,
         description="Path to URDF/Xacro file within model_package",
     )
-    declare_robot_name_cmd = DeclareLaunchArgument(
-        "robot_name",
+    declare_prefix_arg = DeclareLaunchArgument(
+        "prefix",
         default_value="",
         description=(
-            "Name of the robot (specifying this will add the "
-            "robot name prefix to joints, links, etc. in the robot model)."
+            "A prefix for the names of joints, links, etc. in the robot model). "
+            "E.g. 'base_link' will become 'cohort1_base_link' if prefix "
+            "is set to 'cohort1'."
         ),
     )
-    declare_namespace_cmd = DeclareLaunchArgument(
+    declare_namespace_arg = DeclareLaunchArgument(
         "namespace",
         default_value="",
         description="Namespace under which to bring up nodes, topics, etc.",
     )
-    declare_use_sim_time_cmd = DeclareLaunchArgument(
+    declare_use_sim_time_arg = DeclareLaunchArgument(
         "use_sim_time", default_value="false", description="Use simulation time if true"
     )
-    declare_use_jsp_cmd = DeclareLaunchArgument(
+    declare_use_jsp_arg = DeclareLaunchArgument(
         "use_jsp",
         default_value="true",
         description="If true, launch the joint_state_publisher (CLI)",
     )
-    declare_use_jsp_gui_cmd = DeclareLaunchArgument(
+    declare_use_jsp_gui_arg = DeclareLaunchArgument(
         "use_jsp_gui",
         default_value="false",
         description="If true, launch the joint_state_publisher_gui",
     )
-    declare_use_rviz_cmd = DeclareLaunchArgument(
+    declare_use_rviz_arg = DeclareLaunchArgument(
         "use_rviz", default_value="true", description="If true, launch RViz"
     )
-    declare_use_rviz_config_template_cmd = DeclareLaunchArgument(
+    declare_use_rviz_config_template_arg = DeclareLaunchArgument(
         "use_rviz_config_template",
         default_value="true",
         description="If true, generate the RViz config from the specified RViz config template.",
     )
-    declare_rviz_config_template_cmd = DeclareLaunchArgument(
+    declare_rviz_config_template_arg = DeclareLaunchArgument(
         "rviz_config_template",
         default_value=default_rviz_config_template_file,
         description="Path to the RViz config template file",
     )
-    declare_rviz_config_cmd = DeclareLaunchArgument(
+    declare_rviz_config_arg = DeclareLaunchArgument(
         "rviz_config",
         default_value=default_rviz_config_file,
         description="Path to the RViz config file",
     )
-    declare_use_lidar_cmd = DeclareLaunchArgument(
+    declare_use_lidar_arg = DeclareLaunchArgument(
         "use_lidar",
         default_value="false",
         description="If true, include the lidar in the robot description",
     )
-    declare_lidar_update_rate_cmd = DeclareLaunchArgument(
+    declare_lidar_update_rate_arg = DeclareLaunchArgument(
         "lidar_update_rate",
         default_value="30",
         description="Set the update rate of the LiDAR sensor.",
@@ -93,7 +94,7 @@ def generate_launch_description():
     # Launch Configurations
     model_package = LaunchConfiguration("model_package")
     model_file = LaunchConfiguration("model_file")
-    robot_name = LaunchConfiguration("robot_name")
+    prefix = LaunchConfiguration("prefix")
     namespace = LaunchConfiguration("namespace")
     use_sim_time = LaunchConfiguration("use_sim_time")
     use_jsp = LaunchConfiguration("use_jsp")
@@ -105,26 +106,14 @@ def generate_launch_description():
     use_lidar = LaunchConfiguration("use_lidar")
     lidar_update_rate = LaunchConfiguration("lidar_update_rate")
 
-    # Compute the robot prefix only if a robot name is provided
-    # This expression will evaluate to, for example, "cohort_" if
-    # robot_name is "cohort", or to an empty string if robot_name is empty.
-    robot_prefix = PythonExpression(
-        ["'", robot_name, "_' if '", robot_name, "' else ''"]
-    )
-    # Compute the prefix argument only if a robot_name/robot_prefix is provided.
-    # This expression will evaluate to, for example, "prefix:=cohort_" if
-    # robot_prefix is "cohort_", or to an empty string if robot_prefix is empty.
-    robot_prefix_arg = PythonExpression(
-        ["('prefix:=' + '", robot_prefix, "') if '", robot_prefix, "' else ''"]
-    )
-
-    # Robot description from Xacro, including the conditional robot name prefix.
+    # Robot description from xacro
     robot_description = Command(
         [
             "xacro ",
+
             PathJoinSubstitution([FindPackageShare(model_package), model_file]),
-            " ",
-            robot_prefix_arg,
+            " prefix:=",
+            prefix,
             " use_lidar:=",
             use_lidar,
             " lidar_update_rate:=",
@@ -168,6 +157,20 @@ def generate_launch_description():
         output="screen",
     )
 
+    # Build the prefix with underscore.
+    # This expression will evaluate to, for example, "cohort_" if
+    # the prefix is "cohort", or to an empty string if prefix is empty.
+    prefix_ = PythonExpression(
+        ["'", prefix, "_' if '", prefix, "' else ''"]
+    )
+
+    # Build the namespace with leading and trailing slashes.
+    # This expression will evaluate to, for example, "/cohort1/" if
+    # the namespace is "cohort1", or to an empty string if namespace is empty.
+    _namespace_ = PythonExpression(
+        ["'/", namespace, "/' if '", namespace, "' else ''"]
+    )
+
     # Generate RViz config from template.
     # The robot prefix will be substituted into the RViz config template in
     # place of the ARCS_COHORT_PREFIX variable and the namespace will be
@@ -179,18 +182,15 @@ def generate_launch_description():
     # This type of dynamic RViz config generation could still be useful in the
     # early stages of project development to test namespacing, prefixing, etc.
     #
-    namespace_env_var = PythonExpression(
-        ["'/", namespace, "' if '", namespace, "' else ''"]
-    )
     rviz_config_generator = ExecuteProcess(
         condition=IfCondition(use_rviz_config_template),
         cmd=[
             [
                 "ARCS_COHORT_PREFIX='",
-                robot_prefix,
+                prefix_,
                 "' ",
                 "ARCS_COHORT_NAMESPACE='",
-                namespace_env_var,
+                _namespace_,
                 "' ",
                 "envsubst < ",
                 rviz_config_template,
@@ -215,19 +215,19 @@ def generate_launch_description():
     return LaunchDescription(
         [
             # Declare launch arguments
-            declare_model_package_cmd,
-            declare_model_file_cmd,
-            declare_robot_name_cmd,
-            declare_namespace_cmd,
-            declare_use_sim_time_cmd,
-            declare_use_jsp_cmd,
-            declare_use_jsp_gui_cmd,
-            declare_use_rviz_cmd,
-            declare_use_rviz_config_template_cmd,
-            declare_rviz_config_template_cmd,
-            declare_rviz_config_cmd,
-            declare_use_lidar_cmd,
-            declare_lidar_update_rate_cmd,
+            declare_model_package_arg,
+            declare_model_file_arg,
+            declare_prefix_arg,
+            declare_namespace_arg,
+            declare_use_sim_time_arg,
+            declare_use_jsp_arg,
+            declare_use_jsp_gui_arg,
+            declare_use_rviz_arg,
+            declare_use_rviz_config_template_arg,
+            declare_rviz_config_template_arg,
+            declare_rviz_config_arg,
+            declare_use_lidar_arg,
+            declare_lidar_update_rate_arg,
             # Nodes
             push_namespace,
             rsp_node,

@@ -2,6 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
 
     <!-- Arguments -->
+    <xacro:arg name="namespace" default="" />
     <xacro:arg name="prefix" default="" />
     <xacro:arg name="camera_name" default="zedm" />
     <xacro:arg name="camera_model" default="zedm" />
@@ -18,10 +19,9 @@
     <!-- Build robot model -->
     <xacro:robot_description prefix="$(arg prefix)" camera_name="$(arg camera_name)" camera_model="$(arg camera_model)"/>
     <xacro:if value="$(arg use_lidar)">
-        <xacro:lidar_description prefix="$(arg prefix)"/> 
+        <xacro:lidar_description namespace="$(arg namespace)" prefix="$(arg prefix)"/>
     </xacro:if>
-    <xacro:vectornav_imu_description prefix="$(arg prefix)"/>
-    <xacro:zed_camera_description prefix="$(arg prefix)" camera_name="$(arg camera_name)" camera_model="$(arg camera_model)"/>
-
+    <xacro:vectornav_imu_description namespace="$(arg namespace)" prefix="$(arg prefix)"/>
+    <xacro:zed_camera_description namespace="$(arg namespace)" prefix="$(arg prefix)" camera_name="$(arg camera_name)" camera_model="$(arg camera_model)"/>
 
 </robot>

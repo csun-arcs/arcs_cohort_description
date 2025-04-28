@@ -26,9 +26,9 @@ A test launch file (`launch/view_model.launch.py`) is provided that allows for t
   - **Default**: `arcs_cohort_description`
   - **Example**: `model_file:=/home/your_workspace/src/arcs_cohort_description/robot.urdf.xacro`
 
-- **`robot_name`**: Specifies the name of the robot, useful for multi-robot scenarios or namespaces.
+- **`prefix`**: A prefix for the names of joints, links, etc. in the robot model). E.g. 'base_link' will become 'cohort1_base_link' if prefix is set to 'cohort1'.
   - **Default**: `''`
-  - **Example**: `robot_name:=my_robot`
+  - **Example**: `prefix:=my_robot`
 
 - **`namespace`**: Namespace under which to bring up nodes, topics, etc.
   - **Default**: `''`
