@@ -58,7 +58,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: ${ARCS_COHORT_NAMESPACE}/robot_description
+        Value: ${ARCS_COHORT_NAMESPACE}robot_description
       Enabled: true
       Links:
         All Links Enabled: true

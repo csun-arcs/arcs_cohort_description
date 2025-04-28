@@ -110,6 +110,7 @@ def generate_launch_description():
     robot_description = Command(
         [
             "xacro ",
+
             PathJoinSubstitution([FindPackageShare(model_package), model_file]),
             " prefix:=",
             prefix,
@@ -163,6 +164,13 @@ def generate_launch_description():
         ["'", prefix, "_' if '", prefix, "' else ''"]
     )
 
+    # Build the namespace with leading and trailing slashes.
+    # This expression will evaluate to, for example, "/cohort1/" if
+    # the namespace is "cohort1", or to an empty string if namespace is empty.
+    _namespace_ = PythonExpression(
+        ["'/", namespace, "/' if '", namespace, "' else ''"]
+    )
+
     # Generate RViz config from template.
     # The robot prefix will be substituted into the RViz config template in
     # place of the ARCS_COHORT_PREFIX variable and the namespace will be
@@ -174,9 +182,6 @@ def generate_launch_description():
     # This type of dynamic RViz config generation could still be useful in the
     # early stages of project development to test namespacing, prefixing, etc.
     #
-    namespace_env_var = PythonExpression(
-        ["'/", namespace, "' if '", namespace, "' else ''"]
-    )
     rviz_config_generator = ExecuteProcess(
         condition=IfCondition(use_rviz_config_template),
         cmd=[
@@ -185,7 +190,7 @@ def generate_launch_description():
                 prefix_,
                 "' ",
                 "ARCS_COHORT_NAMESPACE='",
-                namespace_env_var,
+                _namespace_,
                 "' ",
                 "envsubst < ",
                 rviz_config_template,
