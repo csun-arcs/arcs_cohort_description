@@ -29,9 +29,13 @@ The package is organized into the following folders, each serving a specific pur
 
 | Branch | Docs | Tests |
 |--------|------|-------|
-| `main` | ![Docs](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/generate-docs.yml/badge.svg?branch=main) | ![Tests](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/run-tests.yml/badge.svg?branch=main) |
+| `main` | ![Docs](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/generate-docs.yml.svg?branch=main) | ![Tests](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/run-tests.yml.svg?branch=main) |
 
-| `humble` | ![Docs](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/generate-docs.yml/badge.svg?branch=humble) | ![Tests](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/run-tests.yml/badge.svg?branch=humble) |
+
+
+
+| `humble` | ![Docs](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/generate-docs.yml.svg?branch=humble) | ![Tests](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/run-tests.yml.svg?branch=humble) |
+
 
 ## 📚 Documentation
 
