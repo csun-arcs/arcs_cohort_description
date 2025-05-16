@@ -15,7 +15,7 @@ This is the `{{ repo_name }}` ROS 2 package, part of the [CoHORT](https://github
 
 The package is organized into the following folders, each serving a specific purpose:
 
-- **`description/`**: Contains the main URDF (Unified Robot Description Format) file of the robot, along with separate URDF files for various sensors, including:
+- **`description/`**: Contains the main [URDF (Unified Robot Description Format)](https://docs.ros.org/en/jazzy/Tutorials/Intermediate/URDF/URDF-Main.html) [Xacro](https://docs.ros.org/en/ros2_packages/rolling/api/xacro/) file for the robot, along with separate URDF Xacro files for various sensors, including:
   - ZED Mini camera
   - IMU (Inertial Measurement Unit)
   - LiDAR
