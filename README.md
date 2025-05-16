@@ -1,12 +1,21 @@
-# ARCS Cohort Description Package
+# arcs_cohort_description
 
-This package provides the description of the ARCS CoHORT rover, including its URDF model and sensor configurations, for use in ROS 2. It enables users to simulate and visualize the robot in RViz and Gazebo.
+![License](https://img.shields.io/github/license/csun-arcs/arcs_cohort_description)
+![Last Commit](https://img.shields.io/github/last-commit/csun-arcs/arcs_cohort_description)
+
+This is the `arcs_cohort_description` ROS 2 package, part of the [CoHORT](https://github.com/csun-arcs/arcs_cohort) multi-rover autonomy software stack.
+
+
+## 📝 Description
+
+This package provides the description of the CSUN ARCS CoHORT rover, including its URDF model and sensor configurations, for use in ROS 2. It enables users to simulate and visualize the robot in RViz and Gazebo.
+
 
 ## Folder Structure
 
 The package is organized into the following folders, each serving a specific purpose:
 
-- **`description/`**: Contains the main URDF (Unified Robot Description Format) file of the robot, along with separate URDF files for various sensors, including:
+- **`description/`**: Contains the main [URDF (Unified Robot Description Format)](https://docs.ros.org/en/jazzy/Tutorials/Intermediate/URDF/URDF-Main.html) [Xacro](https://docs.ros.org/en/ros2_packages/rolling/api/xacro/) file for the robot, along with separate URDF Xacro files for various sensors, including:
   - ZED Mini camera
   - IMU (Inertial Measurement Unit)
   - LiDAR
@@ -16,52 +25,45 @@ The package is organized into the following folders, each serving a specific pur
 
 - **`meshes/`**: Holds the STL mesh files used in the URDF. These files define the visual and collision geometry of the robot's components, referenced by the URDF for simulation and visualization.
 
-## Model Test Viewer Launch File and Arguments
+## 📦 Build Status
 
-A test launch file (`launch/view_model.launch.py`) is provided that allows for the model to be visualized in RViz. It includes several launch arguments to configure the launch process. Below are examples of possible arguments (adjust based on your specific implementation):
+| Branch | Docs | Tests |
+|--------|------|-------|
+| `main` | ![Docs](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/generate-docs.yml/badge.svg?branch=main) | ![Tests](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/run-tests.yml/badge.svg?branch=main) |
 
-- **`model_file`**: A path to manually specify the path of the robot model.
-  - **Default**: `arcs_cohort_description`
-  - **Example**: `model_file:=/home/your_workspace/src/arcs_cohort_description/robot.urdf.xacro`
+| `humble` | ![Docs](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/generate-docs.yml/badge.svg?branch=humble) | ![Tests](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/run-tests.yml/badge.svg?branch=humble) |
 
-- **`prefix`**: A prefix for the names of joints, links, etc. in the robot model). E.g. 'base_link' will become 'cohort1_base_link' if prefix is set to 'cohort1'.
-  - **Default**: `''`
-  - **Example**: `prefix:=my_robot`
+## 📚 Documentation
 
-- **`namespace`**: Namespace under which to bring up nodes, topics, etc.
-  - **Default**: `''`
-  - **Example**: `namespace:=my_namespace`
- 
-- **`use_sim_time`**: A boolean to determine whether to use simulation time (e.g., from a simulator like Gazebo) or real-time.
-  - **Default**: `true`
-  - **Example**: `use_sim_time:=false`
+For full documentation and launch file reference, visit the [Wiki](https://github.com/csun-arcs/arcs_cohort_description/wiki)
 
-- **`use_jsp`**: Specifies if the joint state publisher should be launched or not. It will be set to true when only using rviz.
-  - **Default**: `true`
-  - **Example**: `use_jsp:=false`
 
-- **`use_jsp_gui`**: Specifies if the joint state publisher should be launched with the GUI or not. 
-  - **Default**: `false`
-  - **Example**: `use_jsp_gui:=true`
- 
-- **`use_rviz`**: Launch rviz when set to true.
-  - **Default**: `true`
-  - **Example**: `use_rviz:=false`
+## 🚀 Launch Files
 
-- **`rviz_config`**: Specifies path to the RViz config file. 
-  - **Default**: `default_rviz_config_file`
-  - **Example**: `rviz_config:=/home/your_workspace/src/arcs_cohort_description/rviz_config/your_config_file`
- 
-- **`use_lidar`**: Specifies if we launch the model with the LiDAR or not.
-  - **Default**: `false`
-  - **Example**: `use_lidar:=false`
+The following launch files are provided by this package:
 
-- **`lidar_update_rate`**: Specifies the update rate of the LiDAR scan. 
-  - **Default**: `30`
-  - **Example**: `lidar_update_rate:=10`
 
-To set these arguments, use the following syntax when running the launch file:
+- `View Model`: [view_model.launch](https://github.com/csun-arcs/arcs_cohort_description/wiki/view_model.launch)
 
-```bash
-ros2 launch arcs_cohort_description view_model.launch.py arg:=value
-```
+
+
+
+## 👥 Maintainers
+
+
+- Barry Ridge (barry [dot] ridge [at] csun [dot] edu)
+
+- Subhobrata Chakraborty (subhobrata [dot] chakraborty [at] csun [dot] edu)
+
+
+
+## 🗃️ Repository
+
+- 📁 GitHub: [csun-arcs/arcs_cohort_description](https://github.com/csun-arcs/arcs_cohort_description)
+- 📚 Wiki: [Documentation](https://github.com/csun-arcs/arcs_cohort_description/wiki)
+- 👥 Contributors: [See contributors](https://github.com/csun-arcs/arcs_cohort_description/graphs/contributors)
+
+
+## 📄 License
+
+This package is licensed under the [**Apache-2.0** license](https://github.com/csun-arcs/arcs_cohort_description/blob/main/LICENSE).
