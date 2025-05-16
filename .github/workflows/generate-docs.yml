@@ -1,0 +1,19 @@
+name: Generate Docs and README
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-docs:
+    uses: csun-arcs/arcs_cohort_docs_tools/.github/workflows/shared-docs-generator.yml@main
+    with:
+      ros_distro: jazzy
+      arcscfg_build_script: no_cuda
+      arcscfg_repo: https://github.com/csun-arcs/arcscfg.git
+      arcscfg_setup_file: cohort_jazzy.yaml
+      arcscfg_deps_file: cohort_ros2_jazzy_ubuntu_noble.yaml
+      github_user: csun-arcs
+      docs_workflow_filename: generate-docs.yml
+      tests_workflow_filename: run-tests.yml
