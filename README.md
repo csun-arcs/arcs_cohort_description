@@ -5,11 +5,9 @@
 
 This is the `arcs_cohort_description` ROS 2 package, part of the [CoHORT](https://github.com/csun-arcs/arcs_cohort) multi-rover autonomy software stack.
 
-
 ## 📝 Description
 
 This package provides the description of the CSUN ARCS CoHORT rover, including its URDF model and sensor configurations, for use in ROS 2. It enables users to simulate and visualize the robot in RViz and Gazebo.
-
 
 ## Folder Structure
 
@@ -29,44 +27,27 @@ The package is organized into the following folders, each serving a specific pur
 
 | Branch | Docs | Tests |
 |--------|------|-------|
-| `main` | ![Docs](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/generate-docs.yml.svg?branch=main) | ![Tests](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/run-tests.yml.svg?branch=main) |
-
-
-
-
-| `humble` | ![Docs](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/generate-docs.yml.svg?branch=humble) | ![Tests](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/run-tests.yml.svg?branch=humble) |
-
+| `main` | ![Docs](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/generate-docs.yml/badge.svg?branch=main) | ![Tests](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/run-tests.yml/badge.svg?branch=main) |
+| `humble` | ![Docs](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/generate-docs.yml/badge.svg?branch=humble) | ![Tests](https://github.com/csun-arcs/arcs_cohort_description/actions/workflows/run-tests.yml/badge.svg?branch=humble) |
 
 ## 📚 Documentation
 
 For full documentation and launch file reference, visit the [Wiki](https://github.com/csun-arcs/arcs_cohort_description/wiki)
 
-
 ## 🚀 Launch Files
 
 The following launch files are provided by this package:
 
-
 - `View Model`: [view_model.launch](https://github.com/csun-arcs/arcs_cohort_description/wiki/view_model.launch)
-
-
-
 
 ## 👥 Maintainers
 
-
-- Barry Ridge (barry [dot] ridge [at] csun [dot] edu)
-
-- Subhobrata Chakraborty (subhobrata [dot] chakraborty [at] csun [dot] edu)
-
-
-
+- Barry Ridge (barry [dot] ridge [at] csun [dot] edu)- Subhobrata Chakraborty (subhobrata [dot] chakraborty [at] csun [dot] edu)
 ## 🗃️ Repository
 
 - 📁 GitHub: [csun-arcs/arcs_cohort_description](https://github.com/csun-arcs/arcs_cohort_description)
 - 📚 Wiki: [Documentation](https://github.com/csun-arcs/arcs_cohort_description/wiki)
 - 👥 Contributors: [See contributors](https://github.com/csun-arcs/arcs_cohort_description/graphs/contributors)
-
 
 ## 📄 License
 
