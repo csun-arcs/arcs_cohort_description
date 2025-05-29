@@ -2,45 +2,26 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
 
     <!-- Arguments -->
+    <xacro:arg name="namespace" default="" />
     <xacro:arg name="prefix" default="" />
     <xacro:arg name="camera_name" default="zedm" />
     <xacro:arg name="camera_model" default="zedm" />
-    <xacro:arg name="camera_resolution" default="HD720" />
     <xacro:arg name="use_lidar" default="false" />
-    <xacro:arg name="lidar_update_rate" default="30" />
-    <xacro:arg name="use_ros2_control" default="false" />
 
     <!-- Includes -->
     <xacro:include filename="robot_core.xacro"/>
-    <xacro:include filename="lidar.xacro"/>
     <xacro:include filename="vectornav_imu.xacro"/>
     <xacro:include filename="zed_camera.xacro"/>
     <xacro:if value="$(arg use_lidar)">
         <xacro:include filename="lidar.xacro"/>
     </xacro:if>
 
-    <!-- Include Gazebo plugins -->
-    <xacro:if value="$(arg use_ros2_control)">
-        <xacro:include filename="$(find arcs_cohort_gazebo_sim)/control/gazebo_ros2_control_plugin.xacro"/>
-    </xacro:if>
-    <xacro:unless value="$(arg use_ros2_control)">
-        <xacro:include filename="$(find arcs_cohort_gazebo_sim)/control/gazebo_diff_drive_plugin.xacro"/>
-    </xacro:unless>
-
     <!-- Build robot model -->
     <xacro:robot_description prefix="$(arg prefix)" camera_name="$(arg camera_name)" camera_model="$(arg camera_model)"/>
     <xacro:if value="$(arg use_lidar)">
-        <xacro:lidar_description prefix="$(arg prefix)" lidar_update_rate="$(arg lidar_update_rate)"/>
+        <xacro:lidar_description namespace="$(arg namespace)" prefix="$(arg prefix)"/>
     </xacro:if>
-    <xacro:vectornav_imu_description prefix="$(arg prefix)"/>
-    <xacro:zed_camera_description prefix="$(arg prefix)" camera_name="$(arg camera_name)" camera_model="$(arg camera_model)" resolution="$(arg camera_resolution)"/>
-
-    <!-- Conditionally call the appropriate Gazebo plugin description -->
-    <xacro:if value="$(arg use_ros2_control)">
-        <xacro:gazebo_ros2_control_plugin_description prefix="$(arg prefix)"/>
-    </xacro:if>
-    <xacro:unless value="$(arg use_ros2_control)">
-        <xacro:gazebo_diff_drive_plugin_description prefix="$(arg prefix)"/>
-    </xacro:unless>
+    <xacro:vectornav_imu_description namespace="$(arg namespace)" prefix="$(arg prefix)"/>
+    <xacro:zed_camera_description namespace="$(arg namespace)" prefix="$(arg prefix)" camera_name="$(arg camera_name)" camera_model="$(arg camera_model)"/>
 
 </robot>

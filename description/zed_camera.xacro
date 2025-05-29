@@ -12,21 +12,27 @@ https://github.com/rpanther/panther_simulation/blob/master/panther_gazebo/urdf
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
-
     <!-- Define a macro with a prefix param for the Zed M camera description -->
-    <xacro:macro name="zed_camera_description" params="prefix camera_name=zedm camera_model=zedm resolution=VGA">
+    <xacro:macro name="zed_camera_description" params="namespace prefix camera_name=zedm camera_model=zedm">
 
-        <!-- Arguments for zed_wrapper/zed_camera -->
-        <xacro:arg name="custom_baseline"  default="0.0" />
-        <xacro:arg name="enable_gnss"   default="false" />
-        <xacro:arg name="gnss_x" default="0.0" />
-        <xacro:arg name="gnss_y" default="0.0" />
-        <xacro:arg name="gnss_z" default="0.0" />
+        <!-- Properties -->
+        <xacro:if value="${prefix != ''}">
+            <xacro:property name="prefix_" value="${prefix}_"/>
+        </xacro:if>
+        <xacro:if value="${prefix == ''}">
+            <xacro:property name="prefix_" value=""/>
+        </xacro:if>
+
+        <xacro:property name="custom_baseline" value="0.0" />
+        <xacro:property name="enable_gnss" value="false" />
+        <xacro:property name="gnss_x" value="0.0" />
+        <xacro:property name="gnss_y" value="0.0" />
+        <xacro:property name="gnss_z" value="0.0" />
 
         <!-- Include zed_wrapper/zed_camera description -->
         <xacro:include filename="$(find zed_wrapper)/urdf/zed_macro.urdf.xacro" />
-        <xacro:zed_camera name="$(arg camera_name)" model="$(arg camera_model)" custom_baseline="$(arg custom_baseline)" enable_gnss="$(arg enable_gnss)">
-                <origin xyz="$(arg gnss_x) $(arg gnss_y) $(arg gnss_z)" rpy="0 0 0"/>
+        <xacro:zed_camera name="$(arg camera_name)" model="$(arg camera_model)" custom_baseline="${custom_baseline}" enable_gnss="${enable_gnss}">
+                <origin xyz="${gnss_x} ${gnss_y} ${gnss_z}" rpy="0 0 0"/>
         </xacro:zed_camera>
 
         <!--Camera-->
@@ -35,109 +41,6 @@ https://github.com/rpanther/panther_simulation/blob/master/panther_gazebo/urdf
             <child link="${camera_name}_camera_link"/>
             <origin xyz="0.037592 -0.0065 -0.02273" rpy="0 ${30*(M_PI/180)} 0" />
         </joint>
-
-        <xacro:if value="${resolution == 'HD2K'}">
-            <xacro:property name="resolution_width" value="2208" />
-            <xacro:property name="resolution_height" value="1242" />
-            <xacro:property name="update_rate" value="15" />
-        </xacro:if>
-        <xacro:if value="${resolution == 'HD1080'}">
-            <xacro:property name="resolution_width" value="1920" />
-            <xacro:property name="resolution_height" value="1080" />
-            <xacro:property name="update_rate" value="30" />
-        </xacro:if>
-        <xacro:if value="${resolution == 'HD720'}">
-            <xacro:property name="resolution_width" value="1280" />
-            <xacro:property name="resolution_height" value="720" />
-            <xacro:property name="update_rate" value="60" />
-        </xacro:if>
-        <xacro:if value="${resolution == 'VGA'}">
-            <xacro:property name="resolution_width" value="672" />
-            <xacro:property name="resolution_height" value="376" />
-            <xacro:property name="update_rate" value="100" />
-        </xacro:if>
-
-        <xacro:if value="${camera_model == 'zed'}">
-            <xacro:property name="baseline" value="0.12" />
-            <xacro:property name="fov" value="2.0" />
-            <xacro:property name="clip_near" value="0.3" />
-            <xacro:property name="clip_far" value="25" />
-            <!-- Gazebo color -->
-            <gazebo reference="${camera_model}_camera_center">
-                <material>Gazebo/Grey</material>
-            </gazebo>
-        </xacro:if>
-        <xacro:if value="${camera_model == 'zedm'}">
-            <xacro:property name="baseline" value="0.06" />
-            <xacro:property name="fov" value="2.0" />
-            <xacro:property name="clip_near" value="0.1" />
-            <xacro:property name="clip_far" value="15" />
-            <!-- Add IMU for ZED -->
-            <!-- <xacro:imu_gazebo name="${camera_name}" frame="${camera_name}_imu_frame_gazebo" /> -->
-            <!-- Gazebo color -->
-            <gazebo reference="${camera_model}_camera_center">
-                <material>Gazebo/DarkGrey</material>
-            </gazebo>
-        </xacro:if>
-        <xacro:if value="${camera_model == 'zed2'}">
-            <xacro:property name="baseline" value="0.12" />
-            <xacro:property name="fov" value="1.8" />
-            <xacro:property name="clip_near" value="0.2" />
-            <xacro:property name="clip_far" value="20" />
-            <!-- Add IMU for ZED -->
-            <xacro:imu_gazebo name="${camera_name}" frame="${camera_name}_imu_frame_gazebo" />
-            <!-- Gazebo color -->
-            <gazebo reference="${camera_model}_camera_center">
-                <material>Gazebo/Black</material>
-            </gazebo>
-        </xacro:if>
-
-        <!-- Left Camera Gazebo -->
-        <gazebo reference="${camera_name}_left_camera_frame">
-            <sensor name="${prefix}left_camera" type="rgbd_camera">
-                <topic>camera/left_camera</topic>
-                <gz_frame_id>${camera_name}_left_camera_frame</gz_frame_id>
-                <always_on>1</always_on>
-                <update_rate>${update_rate}</update_rate>
-                <visualize>true</visualize>
-                <camera>
-                    <camera_info_topic>camera/left_camera_info</camera_info_topic>
-                    <horizontal_fov>${fov}</horizontal_fov>
-                    <image>
-                        <format>R8G8B8</format>
-                        <width>${resolution_width}</width>
-                        <height>${resolution_height}</height>
-                    </image>
-                    <clip>
-                        <near>${clip_near}</near>
-                        <far>${clip_far}</far>
-                    </clip>
-                </camera>
-            </sensor>
-        </gazebo>
-
-        <!-- Right Camera Gazebo -->
-        <gazebo reference="${camera_name}_right_camera_frame">
-            <sensor name="${prefix}right_camera" type="camera">
-                <topic>camera/right_camera/image</topic>
-                <gz_frame_id>${camera_name}_right_camera_frame</gz_frame_id>
-                <visualize>true</visualize>
-                <update_rate>${update_rate}</update_rate>
-                <camera>
-                    <camera_info_topic>camera/right_camera/camera_info</camera_info_topic>
-                    <horizontal_fov>${fov}</horizontal_fov>
-                    <image>
-                        <format>R8G8B8</format>
-                        <width>${resolution_width}</width>
-                        <height>${resolution_height}</height>
-                    </image>
-                    <clip>
-                        <near>${clip_near}</near>
-                        <far>${clip_far}</far>
-                    </clip>
-                </camera>
-            </sensor>
-        </gazebo>
 
     </xacro:macro>
 
