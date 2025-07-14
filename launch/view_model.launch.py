@@ -86,6 +86,11 @@ def generate_launch_description():
     declare_use_rviz_arg = DeclareLaunchArgument(
         "use_rviz", default_value="true", description="If true, launch RViz"
     )
+    declare_use_camera_arg = DeclareLaunchArgument(
+        "use_camera",
+        default_value="true",
+        description="If true, include the camera in the robot description",
+    )
     declare_use_lidar_arg = DeclareLaunchArgument(
         "use_lidar",
         default_value="false",
@@ -98,6 +103,7 @@ def generate_launch_description():
     model_package = LaunchConfiguration("model_package")
     model_file = LaunchConfiguration("model_file")
     rviz_config = LaunchConfiguration("rviz_config")
+    use_camera = LaunchConfiguration("use_camera")
     use_lidar = LaunchConfiguration("use_lidar")
     lidar_update_rate = LaunchConfiguration("lidar_update_rate")
     log_level = LaunchConfiguration("log_level")
@@ -113,6 +119,8 @@ def generate_launch_description():
             PathJoinSubstitution([FindPackageShare(model_package), model_file]),
             " prefix:=",
             prefix,
+            " use_camera:=",
+            use_camera,
             " use_lidar:=",
             use_lidar,
             " lidar_update_rate:=",
@@ -197,6 +205,7 @@ def generate_launch_description():
             declare_use_jsp_arg,
             declare_use_jsp_gui_arg,
             declare_use_rviz_arg,
+            declare_use_camera_arg,
             declare_use_lidar_arg,
             # Log
             log_info,
