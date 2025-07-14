@@ -6,12 +6,15 @@
     <xacro:arg name="prefix" default="" />
     <xacro:arg name="camera_name" default="zedm" />
     <xacro:arg name="camera_model" default="zedm" />
+    <xacro:arg name="use_camera" default="true" />
     <xacro:arg name="use_lidar" default="false" />
 
     <!-- Includes -->
     <xacro:include filename="robot_core.xacro"/>
     <xacro:include filename="vectornav_imu.xacro"/>
-    <xacro:include filename="zed_camera.xacro"/>
+    <xacro:if value="$(arg use_camera)">
+        <xacro:include filename="zed_camera.xacro"/>
+    </xacro:if>
     <xacro:if value="$(arg use_lidar)">
         <xacro:include filename="lidar.xacro"/>
     </xacro:if>
@@ -22,6 +25,8 @@
         <xacro:lidar_description namespace="$(arg namespace)" prefix="$(arg prefix)"/>
     </xacro:if>
     <xacro:vectornav_imu_description namespace="$(arg namespace)" prefix="$(arg prefix)"/>
-    <xacro:zed_camera_description namespace="$(arg namespace)" prefix="$(arg prefix)" camera_name="$(arg camera_name)" camera_model="$(arg camera_model)"/>
+    <xacro:if value="$(arg use_camera)">
+        <xacro:zed_camera_description namespace="$(arg namespace)" prefix="$(arg prefix)" camera_name="$(arg camera_name)" camera_model="$(arg camera_model)"/>
+    </xacro:if>
 
 </robot>
